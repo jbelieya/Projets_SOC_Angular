@@ -1,0 +1,12 @@
+/* styles.css */
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ya3ni el page dima e5tha el toul el kemel mta3 l-ecran */
+}
+
+.content {
+    margin-top: 16px; /* Houni n3tiw margin top 16px bech yebda kayen espace bin el header w el content */
+  flex: 1;
+}
+

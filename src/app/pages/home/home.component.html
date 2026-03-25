@@ -1,0 +1,195 @@
+<div class="w-full flex flex-col font-inter">
+  <main class="relative min-h-[80vh] flex items-center overflow-hidden bg-slate-900 z-10 pb-20">
+    
+    <div class="absolute inset-0 z-0 transition-opacity duration-1000">
+      <img [src]="slides[currentIndex].img" 
+     class="w-full h-full object-cover transition-all duration-1000"
+     [class.fade-anim]="true"
+     [id]="'slide-' + currentIndex">
+      <div class="absolute inset-0 "></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-indigo-950/95 via-indigo-950/50 to-transparent"></div>
+    </div>
+
+    <div class="container mx-auto px-6 lg:px-24 relative z-10 py-20">
+      <div class="max-w-2xl">
+        <h2 class="text-white text-5xl lg:text-[70px] font-black leading-[1.1] mb-6 tracking-tight">
+          {{ slides[currentIndex].title }}
+        </h2>
+        <p class="text-indigo-50/70 text-lg mb-10 max-w-lg leading-relaxed font-light">
+          {{ slides[currentIndex].text }}
+        </p>
+
+        <div class="flex items-center gap-5">
+          <button class="bg-[#4f46e5] text-white px-10 py-4 rounded-[2px] font-bold text-sm uppercase hover:bg-white hover:text-indigo-600 transition-all duration-300 shadow-xl shadow-indigo-600/20">
+            How it Works
+          </button>
+          <button class="bg-white/10 backdrop-blur-md border border-white/20 text-white px-10 py-4 rounded-[2px] font-bold text-sm uppercase hover:bg-[#4f46e5] transition-all duration-300">
+            Contact Us
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="absolute inset-x-8 top-1/2 -translate-y-1/2 flex justify-between pointer-events-none z-30">
+      <button (click)="prevSlide()" class="w-12 h-12 rounded-full border border-white/30 text-white flex items-center justify-center hover:bg-[#4f46e5] hover:border-[#4f46e5] pointer-events-auto transition-all duration-300 bg-slate-900/20 backdrop-blur-sm">
+        <i class="fas fa-chevron-left text-sm"></i>
+      </button>
+      <button (click)="nextSlide()" class="w-12 h-12 rounded-full border border-white/30 text-white flex items-center justify-center hover:bg-[#4f46e5] hover:border-[#4f46e5] pointer-events-auto transition-all duration-300 bg-slate-900/20 backdrop-blur-sm">
+        <i class="fas fa-chevron-right text-sm"></i>
+      </button>
+    </div>
+
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-3 z-30">
+      <span *ngFor="let slide of slides; let i = index"
+            (click)="setSlide(i)"
+            [class]="i === currentIndex ? 'w-10 h-2.5 rounded-full bg-[#4f46e5] shadow-lg shadow-indigo-600/40 cursor-pointer transition-all' : 'w-2.5 h-2.5 rounded-full bg-white/30 hover:bg-white/50 cursor-pointer transition-all'">
+      </span>
+    </div>
+
+  </main>
+  <section class="py-24 bg-slate-950 relative overflow-hidden">
+    <div class="container mx-auto px-6 lg:px-24">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-12">
+        <div class="text-center group">
+          <h3 class="text-5xl font-black text-white mb-2 group-hover:text-[#4f46e5] transition">13+</h3>
+          <p class="text-slate-500 uppercase tracking-widest text-xs font-bold">Production Sites</p>
+        </div>
+        <div class="text-center group">
+          <h3 class="text-5xl font-black text-white mb-2 group-hover:text-[#4f46e5] transition">60+</h3>
+          <p class="text-slate-500 uppercase tracking-widest text-xs font-bold">Years Experience</p>
+        </div>
+        <div class="text-center group">
+          <h3 class="text-5xl font-black text-white mb-2 group-hover:text-[#4f46e5] transition">3000+</h3>
+          <p class="text-slate-500 uppercase tracking-widest text-xs font-bold">Employees</p>
+        </div>
+        <div class="text-center group">
+          <h3 class="text-5xl font-black text-white mb-2 group-hover:text-[#4f46e5] transition">No. 1</h3>
+          <p class="text-slate-500 uppercase tracking-widest text-xs font-bold">In EMEA Region</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-24 bg-white rounded-t-[50px] lg:rounded-t-[100px]">
+    <div class="container mx-auto px-6 lg:px-24">
+      <div class="flex flex-col lg:flex-row items-center gap-20">
+        <div class="lg:w-1/2">
+          <h4 class="text-[#4f46e5] font-bold uppercase tracking-widest text-sm mb-4">Innovation at Core</h4>
+          <h2 class="text-slate-900 text-5xl font-black leading-tight mb-8">Shaping the Future of <br> E-Mobility.</h2>
+          <p class="text-slate-600 text-lg leading-relaxed mb-10">
+            COFICAB is at the forefront of the automotive industry's transformation. We develop advanced wiring solutions for Electric Vehicles (EV) and autonomous driving systems.
+          </p>
+          <ul class="space-y-4 mb-10">
+            <li class="flex items-center gap-3 text-slate-800 font-bold"><i class="fas fa-check-circle text-green-500"></i> High Voltage Cables</li>
+            <li class="flex items-center gap-3 text-slate-800 font-bold"><i class="fas fa-check-circle text-green-500"></i> Data Transmission Cables</li>
+            <li class="flex items-center gap-3 text-slate-800 font-bold"><i class="fas fa-check-circle text-green-500"></i> Sustainable Materials</li>
+          </ul>
+        </div>
+        <div class="lg:w-1/2 relative">
+          <div class="aspect-video bg-slate-200 rounded-3xl overflow-hidden shadow-2xl relative group">
+             <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070" class="w-full h-full object-cover">
+             <div class="absolute inset-0 flex items-center justify-center">
+                <button class="w-20 h-20 bg-[#4f46e5] text-white rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition">
+                  <i class="fas fa-play text-2xl ml-1"></i>
+                </button>
+             </div>
+          </div>
+          <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-indigo-100 rounded-full -z-10"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="py-24 bg-slate-50">
+  <div class="container mx-auto px-6 lg:px-24">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      
+      <div class="relative order-2 lg:order-1">
+        <div class="rounded-3xl overflow-hidden shadow-2xl border-8 border-white">
+          <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=2070" alt="Quality Testing" class="w-full h-64 lg:h-[500px] object-cover">
+        </div>
+        <div class="absolute -bottom-6 -left-6 bg-[#4f46e5] p-8 rounded-2xl text-white shadow-xl hidden md:block">
+          <span class="text-4xl font-black italic">100%</span>
+          <p class="text-xs uppercase tracking-widest font-bold mt-1">Compliance & Quality</p>
+        </div>
+      </div>
+
+      <div class="order-1 lg:order-2">
+        <h4 class="text-[#4f46e5] font-bold uppercase tracking-[0.2em] text-sm mb-4">Our Commitment</h4>
+        <h2 class="text-slate-900 text-5xl font-black leading-tight mb-8">Uncompromising <br>Quality Standards.</h2>
+        <p class="text-slate-600 text-lg mb-8 leading-relaxed">
+          At COFICAB, quality is not just a department, it's our DNA. Every millimeter of cable we produce undergoes rigorous testing to meet the highest automotive international standards (IATF 16949).
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm border border-slate-100">
+            <i class="fas fa-shield-alt text-[#4f46e5] mt-1"></i>
+            <div>
+              <h5 class="font-bold text-slate-900">Zero Defect Strategy</h5>
+              <p class="text-xs text-slate-500 mt-1">Advanced monitoring in every production stage.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm border border-slate-100">
+            <i class="fas fa-certificate text-[#4f46e5] mt-1"></i>
+            <div>
+              <h5 class="font-bold text-slate-900">Global Certifications</h5>
+              <p class="text-xs text-slate-500 mt-1">ISO 9001, IATF 16949 & ISO 14001 certified.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+<section class="py-24 bg-slate-900 text-white relative overflow-hidden">
+  <div class="absolute inset-0 opacity-10 pointer-events-none">
+    <img src="https://www.transparenttextures.com/patterns/world-map.png" class="w-full h-full object-contain scale-150">
+  </div>
+
+  <div class="container mx-auto px-6 lg:px-24 relative z-10">
+    <div class="text-center max-w-3xl mx-auto mb-20">
+      <h4 class="text-[#4f46e5] font-bold uppercase tracking-[0.3em] text-sm mb-4">Global Network</h4>
+      <h2 class="text-5xl font-black mb-6">A Leader Across <br> 4 Continents.</h2>
+      <p class="text-slate-400">With 13+ production sites and multiple R&D centers, we are always close to our partners, ensuring seamless delivery and support worldwide.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-white/10 hover:border-[#4f46e5] transition group">
+        <div class="w-12 h-12 bg-[#4f46e5] rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-600/20">
+          <i class="fas fa-globe-europe text-xl text-white"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-4">EMEA</h3>
+        <ul class="text-slate-400 space-y-2 text-sm">
+          <li><i class="fas fa-map-marker-alt text-[#4f46e5] mr-2"></i> Tunisia (HQ)</li>
+          <li><i class="fas fa-map-marker-alt text-[#4f46e5] mr-2"></i> Morocco</li>
+          <li><i class="fas fa-map-marker-alt text-[#4f46e5] mr-2"></i> Romania</li>
+          <li><i class="fas fa-map-marker-alt text-[#4f46e5] mr-2"></i> Portugal</li>
+        </ul>
+      </div>
+
+      <div class="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-white/10 hover:border-[#4f46e5] transition">
+        <div class="w-12 h-12 bg-[#4f46e5] rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-600/20">
+          <i class="fas fa-globe-americas text-xl text-white"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-4">Americas</h3>
+        <ul class="text-slate-400 space-y-2 text-sm">
+          <li><i class="fas fa-map-marker-alt text-[#4f46e5] mr-2"></i> Mexico (Durango/Leon)</li>
+          <li><i class="fas fa-map-marker-alt text-[#4f46e5] mr-2"></i> USA (El Paso)</li>
+          <li><i class="fas fa-map-marker-alt text-[#4f46e5] mr-2"></i> Honduras</li>
+        </ul>
+      </div>
+
+      <div class="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-white/10 hover:border-[#4f46e5] transition">
+        <div class="w-12 h-12 bg-[#4f46e5] rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-600/20">
+          <i class="fas fa-globe-asia text-xl text-white"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-4">Asia</h3>
+        <ul class="text-slate-400 space-y-2 text-sm">
+          <li><i class="fas fa-map-marker-alt text-[#4f46e5] mr-2"></i> China</li>
+          <li><i class="fas fa-map-marker-alt text-[#4f46e5] mr-2"></i> International Hubs</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+</div>

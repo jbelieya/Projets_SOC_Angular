@@ -1,0 +1,48 @@
+<mat-toolbar class="mat-elevation-z3">
+    <button mat-icon-button (click)="collapsed.set(!collapsed())">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <div class="h-12 border-b border-slate-200 px-6 flex items-center gap-8 sticky top-16 z-40">
+  
+  <a routerLink="/app/dashboard" 
+     routerLinkActive="text-[#4f46e5] border-b-2 border-[#4f46e5]" 
+     class="h-full flex items-center px-2 text-[13px] font-bold text-slate-600 hover:text-[#4f46e5] transition-all cursor-pointer no-underline">
+    <i class="fas fa-chart-line mr-2"></i> Dashboard
+  </a>
+
+  <a routerLink="/app/incidents" 
+     routerLinkActive="text-[#4f46e5] border-b-2 border-[#4f46e5]" 
+     class="h-full flex items-center px-2 text-[13px] font-bold text-slate-600 hover:text-[#4f46e5] transition-all cursor-pointer no-underline">
+    <i class="fas fa-shield-alt mr-2"></i> Incidents
+  </a>
+
+  <a routerLink="/app/analysts" 
+     routerLinkActive="text-[#4f46e5] border-b-2 border-[#4f46e5]" 
+     class="h-full flex items-center px-2 text-[13px] font-bold text-slate-600 hover:text-[#4f46e5] transition-all cursor-pointer no-underline">
+    <i class="fas fa-user-shield mr-2"></i> Analysts
+  </a>
+
+  <a routerLink="/app/reports" 
+     routerLinkActive="text-[#4f46e5] border-b-2 border-[#4f46e5]" 
+     class="h-full flex items-center px-2 text-[13px] font-bold text-slate-600 hover:text-[#4f46e5] transition-all cursor-pointer no-underline">
+    <i class="fas fa-file-alt mr-2"></i> Reports
+  </a>
+  <a routerLink="/login" 
+     routerLinkActive="text-[#4f46e5] border-b-2 border-[#4f46e5]" 
+     class="h-full flex items-center px-2 text-[13px] font-bold text-slate-600 hover:text-[#4f46e5] transition-all cursor-pointer no-underline">
+    <i class="fas fa-file-alt mr-2"></i> Contacts
+  </a>
+
+  <div class="flex-1"></div>
+
+  <div class="flex items-center gap-2 text-slate-400 text-[11px] font-bold uppercase tracking-wider">
+    <i class="far fa-calendar-alt"></i>
+    <span>Last 24 Hours</span>
+    <i class="fas fa-chevron-down text-[9px]"></i>
+  </div>
+</div>
+    <span class="spacer"></span> <button mat-icon-button (click)="darkMode.set(!darkMode())">
+        <mat-icon *ngIf="darkMode()">light_mode</mat-icon>
+        <mat-icon *ngIf="!darkMode()">dark_mode</mat-icon>
+    </button>
+</mat-toolbar>

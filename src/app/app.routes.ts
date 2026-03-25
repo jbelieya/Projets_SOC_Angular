@@ -1,3 +1,19 @@
 import { Routes } from '@angular/router';
+import { HomeComponent } from './pages/home/home.component';
+import { LoginComponent } from './pages/login/login.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { IncidentListComponent } from './pages/incident-list/incident-list.component';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+   {path:'',component:HomeComponent},
+   {path:'login',component:LoginComponent},
+   {path:'app',
+    children:[
+        {path:'dashboard',component:DashboardComponent},
+        {path:'incidents',component:IncidentListComponent},
+    ]
+   },
+   {path:'**',redirectTo:''}
+
+
+];

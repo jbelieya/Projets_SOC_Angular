@@ -1,0 +1,14 @@
+.stat-subtext {
+  /* Nest-a3mlou el Typography mta3 Material 19 */
+  font-family: var(--mat-sys-body-small-font);
+  letter-spacing: var(--mat-sys-body-small-tracking);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.text-green {
+  /* Green mta3 Material 3 Standard */
+  color: #2e7d32 !important; 
+  font-weight: 600;
+}

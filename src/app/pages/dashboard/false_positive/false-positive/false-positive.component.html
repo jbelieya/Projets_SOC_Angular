@@ -1,0 +1,22 @@
+<div class="actions-container mt-16">
+  <button mat-raised-button 
+          [color]="currentType === 'month' ? 'primary' : ''" 
+          (click)="toggleType('month')">
+    Par Mois
+  </button>
+
+  <button mat-raised-button 
+          class="ml-8"
+          [color]="currentType === 'year' ? 'primary' : ''" 
+          (click)="toggleType('year')">
+    Par Année
+  </button>
+
+  <button mat-icon-button class="ml-16" (click)="updateStats()">
+    Actualiser
+  </button>
+</div>
+
+<div class="chart-container">
+  <canvas #chart></canvas>
+</div>

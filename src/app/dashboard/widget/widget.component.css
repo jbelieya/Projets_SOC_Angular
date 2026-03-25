@@ -1,0 +1,25 @@
+:host{
+    display: block;
+    border-radius: 16px;
+}
+.container{
+    position:relative;
+    height: 100%;
+    width: 100%;
+    padding: 32px;
+    box-sizing: border-box;
+    border-radius: inherit;
+    overflow: hidden;
+}
+.settings-button{
+    position:absolute;
+    top: 20px;
+    right: 20px;
+
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    cursor: move;
+}

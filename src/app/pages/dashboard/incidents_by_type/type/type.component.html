@@ -1,0 +1,27 @@
+<div class="site-card p-5" style="background-color: var(--sys-surface-container-low); border-radius: 20px; border: 1px solid var(--sys-outline-variant); position: relative;">
+  
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h3 class="text-xs font-black uppercase tracking-widest opacity-60" style="color: var(--sys-on-surface);">Incident Scope</h3>
+      <h2 class="text-lg font-bold" style="color: var(--sys-primary);">Incidents by Type</h2>
+    </div>
+
+     <div class="flex bg-black/20 p-1 rounded-xl border border-white/5">
+      <button (click)="toggleType('month')" 
+              [class.active]="currentType === 'month'"
+              class="btn-nav">Month</button>
+      <button (click)="toggleType('year')" 
+              [class.active]="currentType === 'year'"
+              class="btn-nav">Year</button>
+    </div>
+  </div>
+
+  <div>
+    <canvas #chart></canvas>
+    
+    <div class="total-display flex flex-col justify-center items-center">
+        <span class="total-label uppercase tracking-widest">Total</span>
+        <span class="total-number" style="color: var(--sys-on-surface);">{{ totalIncidents }}</span>
+    </div>
+  </div>
+</div>

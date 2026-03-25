@@ -1,0 +1,80 @@
+<div class="min-h-screen flex items-center justify-center font-sans"
+style="background-color: var(--sys-background);">
+  <div class="flex w-full max-w-5xl shadow-2xl rounded-3xl overflow-hidden h-[650px]">
+    <div class="hidden lg:flex w-1/2 bg-slate-900 p-12 flex-col justify-between text-white relative">
+      <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070" class="absolute inset-0 w-full h-full object-cover">
+      <div class="relative z-10">
+        <h1 class="text-4xl font-black mb-4">COFICAB <br> <span class="text-indigo-400">Portal</span></h1>
+      </div>
+    </div>
+
+    <div class="w-full lg:w-1/2 p-12 flex flex-col justify-center">
+      <div class="max-w-sm mx-auto w-full">
+        
+        <div *ngIf="isLoginMode">
+          <h2 class="text-2xl font-black text-slate-900 mb-2">Sign in</h2>
+          <div *ngIf="loginErrorMessage" class="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">{{ loginErrorMessage }}</div>
+          
+          <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="space-y-4">
+            <input formControlName="username" type="text" placeholder="Username" class="w-full p-3 bg-gray-100 rounded-lg outline-none">
+            <input formControlName="password" type="password" placeholder="Password" class="w-full p-3 bg-gray-100 rounded-lg outline-none">
+            <button type="submit" class="w-full bg-blue-900 text-white font-bold py-3 rounded-lg">Sign in</button>
+          </form>
+          <button (click)="isRegisterMode = true; isLoginMode = false;" class="w-full mt-4 text-blue-900 font-bold hover:underline">Create an Account</button>
+        </div>
+
+        <div *ngIf="isRegisterMode">
+          <h2 class="text-2xl font-black text-slate-900 mb-2">Create Account</h2>
+          
+          <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="space-y-3">
+            
+            <div *ngFor="let field of ['username', 'email', 'telephone', 'password']">
+              <input [formControlName]="field" [type]="field === 'password' ? 'password' : 'text'" 
+                     [placeholder]="field | titlecase"
+                     [ngClass]="{'border-2 border-red-500': isInvalid(registerForm, field)}"
+                     class="w-full p-3 bg-gray-100 rounded-lg outline-none">
+              
+              <div *ngIf="isInvalid(registerForm, field)" class="text-red-500 text-xs mt-1">
+                {{ getErrorMessage(registerForm, field) }}
+              </div>
+              <div *ngIf="errors[field]" class="text-red-500 text-xs mt-1">
+                {{ errors[field][0] }}
+              </div>
+            </div>
+
+            <select formControlName="role" class="w-full p-3 bg-gray-100 rounded-lg outline-none">
+              <option *ngFor="let r of roles" [value]="r.value">{{ r.label }}</option>
+            </select>
+
+            <div *ngIf="successMessage" class="p-3 bg-green-100 text-green-700 rounded-lg">{{ successMessage }}</div>
+            <div *ngIf="errorMessage" class="p-3 bg-red-100 text-red-700 rounded-lg">{{ errorMessage }}</div>
+
+            <button type="submit" [disabled]="isLoading" class="w-full bg-blue-900 text-white font-bold py-3 rounded-lg">
+              {{ isLoading ? 'Loading...' : 'Register' }}
+            </button>
+          </form>
+          <button (click)="isRegisterMode = false; isLoginMode = true;" class="w-full text-blue-900 font-bold text-sm mt-4 hover:underline">Back to Login</button>
+        </div>
+        <div *ngIf="isVerifyingEmail">
+            <button (click)="isRegisterMode = false;isLoginMode = true;" 
+          class="flex items-center text-blue-900 mb-6 font-bold hover:underline transition">
+    <i class="fas fa-arrow-left mr-2"></i> Back to Login
+  </button>
+  <h2 class="text-2xl font-black text-slate-900 mb-2">Verify Email</h2>
+  <p class="text-gray-500 mb-6">Enter the code sent to your email.</p>
+  
+  <input [(ngModel)]="verificationCode" type="text" placeholder="Enter Code" 
+         class="w-full p-3 bg-gray-100 rounded-lg outline-none mb-4">
+         
+  <button (click)="onVerifyCode()" [disabled]="isLoading"
+          class="w-full bg-blue-900 text-white font-bold py-3 rounded-lg">
+    {{ isLoading ? 'Verifying...' : 'Verify' }}
+  </button>
+</div>
+
+<div *ngIf="!isRegisterMode && !isVerifyingEmail">
+  </div>
+      </div>
+    </div>
+  </div>
+</div>

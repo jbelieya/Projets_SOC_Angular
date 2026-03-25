@@ -1,0 +1,93 @@
+<nav class="h-16 border-b border-slate-200 px-6 flex justify-between items-center sticky top-0 z-50">
+  
+  <div class="flex items-center gap-8">
+    <div class="flex flex-col">
+      <h1 class="text-xl font-black text-slate-800 tracking-tighter">
+        COFICAB <span class="text-[#4f46e5] text-sm font-bold ml-1">SOC Platform</span>
+      </h1>
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+        <span class="text-[10px] font-medium text-slate-500 uppercase tracking-widest">System Active</span>
+      </div>
+    </div>
+
+    <div class="hidden lg:flex items-center bg-slate-100 rounded-lg px-3 py-1.5 border border-transparent focus-within:border-[#4f46e5] transition-all">
+      <i class="fas fa-search text-slate-400 text-sm"></i>
+      <input type="text" placeholder="Search incidents..." class="bg-transparent border-none outline-none text-sm ml-2 w-64 text-slate-700 placeholder:text-slate-400">
+    </div>
+  </div>
+
+  <div class="flex items-center gap-4 relative">
+    
+    <div class="flex items-center gap-2 pr-4 border-r border-slate-200">
+      <button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full relative">
+        <i class="far fa-bell text-lg"></i>
+        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+      </button>
+      <button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full">
+        <i class="fas fa-cog text-lg"></i>
+      </button>
+    </div>
+
+    <div (click)="toggleMenu()" class="flex items-center gap-3 pl-2 cursor-pointer hover:bg-slate-50 p-1.5 rounded-lg transition select-none">
+      <div class="flex flex-col text-right hidden sm:flex">
+        <span class="text-xs font-bold text-slate-800">{{ userProfile?.username || 'Analyst' }}</span>
+        <span class="text-[10px] text-slate-500 font-medium">Tier 2 Support</span>
+      </div>
+      <div class="w-9 h-9 bg-[#4f46e5] rounded-lg flex items-center justify-center text-white font-bold shadow-sm uppercase">
+        {{ userProfile?.username?.substring(0,2) || 'AD' }}
+      </div>
+      <i class="fas fa-chevron-down text-[10px] text-slate-400 transition-transform" [ngClass]="{'rotate-180': isMenuOpen}"></i>
+    </div>
+
+    <div *ngIf="isMenuOpen" class="absolute right-0 top-full mt-2 w-72 bg-white rounded-xl shadow-2xl border border-slate-100 py-3 z-[60] animate-in fade-in zoom-in duration-200">
+      
+      <div class="px-4 py-3 mb-2 flex items-center gap-3 border-b border-slate-50">
+        <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-[#4f46e5] font-bold text-lg">
+           {{ userProfile?.username?.substring(0,1) }}
+        </div>
+        <div class="flex flex-col">
+          <span class="font-bold text-slate-800">{{ userProfile?.username }}</span>
+          <span class="text-xs text-slate-500">{{ userProfile?.email }}</span>
+        </div>
+      </div>
+
+      <div class="px-2 space-y-1">
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-50 rounded-lg transition">
+          <div class="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <span>Paramètres et confidentialité</span>
+        </button>
+
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-50 rounded-lg transition">
+          <div class="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-question-circle"></i>
+          </div>
+          <span>Aide et assistance</span>
+        </button>
+
+        <button class="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-50 rounded-lg transition">
+          <div class="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-moon"></i>
+          </div>
+          <span>Affichage et accessibilité</span>
+        </button>
+
+        <div class="h-px bg-slate-100 my-2 mx-3"></div>
+
+        <button (click)="onLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition font-medium">
+          <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-sign-out-alt"></i>
+          </div>
+          <span>Se déconnecter</span>
+        </button>
+      </div>
+      
+      <div class="px-4 mt-3 text-[10px] text-slate-400 flex flex-wrap gap-2">
+        <span>Confidentialité</span> · <span>Conditions</span> · <span>Cookies</span>
+      </div>
+    </div>
+
+  </div>
+</nav>

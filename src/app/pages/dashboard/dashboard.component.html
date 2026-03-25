@@ -1,0 +1,27 @@
+ <div class="header">
+
+    <h2>Dashboard</h2>
+    <button mat-raised-button [mat-menu-trigger-for]="widgetMenu">
+        <mat-icon>add_circle</mat-icon>
+         Add Widget
+    </button>
+    <mat-menu #widgetMenu="matMenu">
+        
+        <button *ngFor="let b of store.widgetsToAdd()" mat-menu-item (click)="store.addWidget(b)">
+            {{ b.label }}
+        </button>
+       
+        <button *ngIf="store.widgetsToAdd().length === 0" mat-menu-item>
+            No more widgets to add
+        </button>
+        
+        
+    </mat-menu>
+ </div>
+
+ <div #dashboard class="dashboard-widgets" cdkDropListGroup>
+@for (w of store.addedWidgets(); track w.id){
+   <app-widget cdkDropList [data]="w" (cdkDropListDropped)="drop($event)"
+   [cdkDropListData]="w.id"></app-widget>
+} 
+</div>

@@ -1,0 +1,43 @@
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.total-display {
+    position: absolute;
+    /* Ma test7ajech transform ken el flex mrigel, ama zidha lel htiyat */
+    top: 55%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none; /* Bch ma t-fasedch el hover 3al chart */
+}
+
+.total-number {
+    font-size: 32px;
+    font-weight: 800;
+    display: block;
+}
+
+.total-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    opacity: 0.6;
+}
+.btn-nav {
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--sys-on-surface-variant);
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+}
+
+.btn-nav.active {
+    background-color: var(--sys-primary);
+    color: var(--sys-on-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}

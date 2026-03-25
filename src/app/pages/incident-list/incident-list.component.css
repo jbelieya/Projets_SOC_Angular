@@ -1,0 +1,25 @@
+/* Add to incident-list.component.css */
+table {
+  border-collapse: collapse;
+}
+
+
+td {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+td:hover {
+  background-color: #eef2ff; /* Indigo-50 */
+  color: #3730a3;           /* Indigo-800 (Wadh7a w professional) */
+  cursor: pointer;
+  font-weight: 500;         /* T-a3ti chwaya focus */
+}
+/* Force el TD elli feha l-menu ma7loul bch t-ji fo9 kol chay */
+td.sticky[class*='z-[100]'] {
+  z-index: 100 !important;
+}
+
+/* Na77i el overflow-hidden ken thamma f-el parent container */
+.overflow-x-auto {
+  overflow: visible !important; /* Hédhi t-najem t-koun l-moshkla l-kbira */
+}

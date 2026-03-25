@@ -1,0 +1,10 @@
+<div class="chart-container" style="background: var(--sys-surface-container-low); border-radius: 20px; border: 1px solid var(--sys-outline-variant);">
+  
+  <div>
+      <button (click)="toggleType('month')" [class.active]="currentType === 'month'" class="btn-nav">Month</button>
+      <button (click)="toggleType('year')" [class.active]="currentType === 'year'" class="btn-nav">Year</button>
+    </div>
+  <div>
+    <canvas #chart></canvas>
+  </div>
+</div>

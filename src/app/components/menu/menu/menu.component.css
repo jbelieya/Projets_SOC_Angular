@@ -1,0 +1,5 @@
+mat-toolbar {
+    position: relative;
+    z-index: 5;
+    justify-content: space-between;
+}

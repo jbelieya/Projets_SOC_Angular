@@ -1,0 +1,12 @@
+<div class="card p-4" style="background: var(--sys-surface-container-low); border-radius: 20px; border: 1px solid var(--sys-outline-variant);">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-sm font-bold opacity-70">Incidents Overview</h2>
+    <div class="flex bg-black/20 p-1 rounded-lg">
+      <button (click)="toggleType('month')" [class.active]="currentType === 'month'" class="btn-nav">Month</button>
+      <button (click)="toggleType('year')" [class.active]="currentType === 'year'" class="btn-nav">Year</button>
+    </div>
+  </div>
+  <div class="h-[250px]">
+    <canvas #chart></canvas>
+  </div>
+</div>

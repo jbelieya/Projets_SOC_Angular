@@ -1,0 +1,23 @@
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+
+.btn-nav {
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--sys-on-surface-variant);
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+}
+
+.btn-nav.active {
+    background-color: var(--sys-primary);
+    color: var(--sys-on-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
