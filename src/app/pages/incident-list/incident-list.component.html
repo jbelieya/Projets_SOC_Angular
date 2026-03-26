@@ -364,6 +364,10 @@
         <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Ticket NB</label>
         <input [(ngModel)]="selectedIncident.help_desk_ticket_nb" type="text" class="w-full px-3 py-2 border rounded-lg text-sm">
       </div>
+      <div class="col-span-2">
+        <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Remediation</label>
+        <input [(ngModel)]="selectedIncident.remediation_destination" type="text" class="w-full px-3 py-2 border rounded-lg text-sm">
+      </div>
     </div>
 
     <div class="px-6 py-4 rounded-b-2xl flex justify-end gap-3">

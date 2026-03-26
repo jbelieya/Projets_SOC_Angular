@@ -3,6 +3,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { IncidentListComponent } from './pages/incident-list/incident-list.component';
+import { AuditLogComponent } from './pages/admin/audit-log/audit-log.component';
 
 export const routes: Routes = [
    {path:'',component:HomeComponent},
@@ -11,6 +12,7 @@ export const routes: Routes = [
     children:[
         {path:'dashboard',component:DashboardComponent},
         {path:'incidents',component:IncidentListComponent},
+        {path:'admin/logs',component:AuditLogComponent},
     ]
    },
    {path:'**',redirectTo:''}

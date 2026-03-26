@@ -1,0 +1,83 @@
+<div class="p-6 bg-slate-50 min-h-screen">
+  <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
+        <i class="fas fa-history text-indigo-600"></i>
+        Historique d'Audit du Système
+      </h1>
+      <p class="text-slate-500 text-sm">Suivi détaillé de toutes les activités des analystes et administrateurs</p>
+    </div>
+
+    <div class="relative">
+      <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+        <i class="fas fa-search text-slate-400"></i>
+      </span>
+      <input (keyup)="applyFilter($event)" 
+             class="block w-full md:w-80 pl-10 pr-3 py-2 border border-slate-200 rounded-xl bg-white shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+             placeholder="Rechercher une action, un user...">
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <table mat-table [dataSource]="dataSource" matSort class="w-full">
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-slate-50 text-slate-600 font-bold py-4 px-6"> Date </th>
+        <td mat-cell *matCellDef="let log" class="py-4 px-6 text-slate-600 text-sm">
+          <div class="flex flex-col">
+            <span class="font-medium">{{ log.date_change | date:'dd MMM yyyy' }}</span>
+            <span class="text-xs text-slate-400">{{ log.date_change | date:'HH:mm:ss' }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="user">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-slate-50 text-slate-600 font-bold py-4 px-6"> Utilisateur </th>
+        <td mat-cell *matCellDef="let log" class="py-4 px-6">
+          <div class="flex items-center gap-2">
+            <div class="h-8 w-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs">
+              {{ log.username.substring(0,2).toUpperCase() }}
+            </div>
+            <span class="text-sm font-semibold text-slate-700">{{ log.username }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-slate-50 text-slate-600 font-bold py-4 px-6"> Action </th>
+        <td mat-cell *matCellDef="let log" class="py-4 px-6">
+          <span [ngClass]="{
+            'bg-emerald-100 text-emerald-700': log.action_type === 'CREATE',
+            'bg-amber-100 text-amber-700': log.action_type === 'UPDATE',
+            'bg-rose-100 text-rose-700': log.action_type === 'DELETE' || log.action_type === 'LOGOUT',
+            'bg-blue-100 text-blue-700': log.action_type === 'LOGIN'
+          }" class="px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase">
+            {{ log.action_type }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef class="bg-slate-50 text-slate-600 font-bold py-4 px-6"> Description </th>
+        <td mat-cell *matCellDef="let log" class="py-4 px-6 text-sm text-slate-500 italic">
+          "{{ log.description_change }}"
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="incident">
+        <th mat-header-cell *matHeaderCellDef class="bg-slate-50 text-slate-600 font-bold py-4 px-6 text-center"> Réf. </th>
+        <td mat-cell *matCellDef="let log" class="py-4 px-6 text-center">
+          <span *ngIf="log.id_incident" class="font-mono text-indigo-600 font-bold text-xs bg-indigo-50 px-2 py-1 rounded">
+            #{{ log.id_incident }}
+          </span>
+          <span *ngIf="!log.id_incident" class="text-slate-300">-</span>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-slate-50 transition-colors border-b border-slate-50"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons class="bg-white border-t border-slate-100"></mat-paginator>
+  </div>
+</div>
