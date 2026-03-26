@@ -9,4 +9,12 @@
     margin-top: 16px; /* Houni n3tiw margin top 16px bech yebda kayen espace bin el header w el content */
   flex: 1;
 }
+@keyframes bounce-in {
+  0% { transform: scale(0); opacity: 0; }
+  70% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
 
+.fixed {
+  animation: bounce-in 0.5s ease-out;
+}

@@ -4,6 +4,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { IncidentListComponent } from './pages/incident-list/incident-list.component';
 import { AuditLogComponent } from './pages/admin/audit-log/audit-log.component';
+import { AiChatComponent } from './pages/ai-chat/ai-chat/ai-chat.component';
 
 export const routes: Routes = [
    {path:'',component:HomeComponent},
@@ -13,6 +14,7 @@ export const routes: Routes = [
         {path:'dashboard',component:DashboardComponent},
         {path:'incidents',component:IncidentListComponent},
         {path:'admin/logs',component:AuditLogComponent},
+        {path:'ai-chat',component:AiChatComponent},
     ]
    },
    {path:'**',redirectTo:''}
