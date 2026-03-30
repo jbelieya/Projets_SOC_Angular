@@ -22,7 +22,7 @@ isOpen = false;
 
   toggleChat() { this.isOpen = !this.isOpen; }
 
-  sendMessage() {
+  async sendMessage() { // Zidna "async" hna
     if (!this.userInput.trim()) return;
 
     const userMsg = this.userInput;
@@ -30,17 +30,21 @@ isOpen = false;
     this.userInput = '';
     this.isLoading = true;
 
-    // Type houni n-najmou n-khalliouh 'General' walla n-jibouh mel Todo
-    this.aiService.askAi("Analyse d'incident", userMsg).subscribe({
-      next: (res) => {
-        this.messages.push({ text: res.suggestion, isAi: true });
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error(err);
-        this.messages.push({ text: "Erreur: Verifiez que Ollama est lancé.", isAi: true });
-        this.isLoading = false;
-      }
-    });
+    // 1. Nazidou message feragh lel AI bech n-3abbih kelma b-kelma
+    const aiMessageIndex = this.messages.length;
+    this.messages.push({ text: '', isAi: true });
+
+    try {
+      // 2. N-kallmou el service jdid (eli fih el fetch)
+      await this.aiService.askAiStream("Analyse d'incident", userMsg, (chunk) => {
+        // Kol ma tji kelma, n-ziduha direct lel message mte3 el AI
+        this.messages[aiMessageIndex].text += chunk;
+        this.isLoading = false; // N-na7iw el loading mel awel kelma
+      });
+    } catch (err) {
+      console.error(err);
+      this.messages[aiMessageIndex].text = "Erreur: Verifiez que Ollama est lancé.";
+      this.isLoading = false;
+    }
   }
 }

@@ -51,57 +51,57 @@ export class KpisService {
          id:4,
          label:'false-positive',
          content:FalsePositiveComponent,
-         rows:2,
-         columns:2,
+         rows:3,
+         columns:3,
        },
        {
          id:5,
          label:'true-positive',
          content:TruePositivesComponent,
-         rows:2,
-         columns:2
+         rows:3,
+         columns:3
        },
        {
          id:6,
          label:'open-incident',
          content:OpenIncidentsComponent,
-         rows:2,
+         rows:3,
          columns:3
        },
        {
          id:7,
          label:'closed-incident',
          content:ClosedIncidentsComponent,
-         rows:2,
-         columns:2
+         rows:3,
+         columns:3
        },
       {
          id:8,
          label:'incident-by-site',
          content:IncidentsBySiteComponent,
-         rows:2,
-         columns:2
+         rows:3,
+         columns:3
        },
        {
          id:9,
          label:'incident-by-type',
          content:TypeComponent,
-         rows:2,
-         columns:2
+         rows:3,
+         columns:3
        },
        {
          id:10,
          label:'incident-by-categorie',
          content:CategorieComponent,
-         rows:2,
-         columns:2
+         rows:3,
+         columns:3
        },
        {
          id:11,
          label:'incident-by-analyst',
          content:AnalystComponent,
-         rows:2,
-         columns:2
+         rows:3,
+         columns:3
        },
       
       ]);
