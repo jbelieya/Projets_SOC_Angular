@@ -14,7 +14,7 @@ export class AiChatComponent {
 isOpen = false;
   userInput = '';
   messages: { text: string, isAi: boolean }[] = [
-    { text: 'Bonjour! Je suis votre assistant SOC. Comment puis-je vous aider?', isAi: true }
+    { text: 'Bonjour! Comment puis-je vous aider?', isAi: true }
   ];
   isLoading = false;
 
@@ -22,7 +22,7 @@ isOpen = false;
 
   toggleChat() { this.isOpen = !this.isOpen; }
 
-  async sendMessage() { // Zidna "async" hna
+  async sendMessage() { 
     if (!this.userInput.trim()) return;
 
     const userMsg = this.userInput;
@@ -30,16 +30,13 @@ isOpen = false;
     this.userInput = '';
     this.isLoading = true;
 
-    // 1. Nazidou message feragh lel AI bech n-3abbih kelma b-kelma
     const aiMessageIndex = this.messages.length;
     this.messages.push({ text: '', isAi: true });
 
     try {
-      // 2. N-kallmou el service jdid (eli fih el fetch)
-      await this.aiService.askAiStream("Analyse d'incident", userMsg, (chunk) => {
-        // Kol ma tji kelma, n-ziduha direct lel message mte3 el AI
+      await this.aiService.askAiStream("", userMsg, (chunk) => {
         this.messages[aiMessageIndex].text += chunk;
-        this.isLoading = false; // N-na7iw el loading mel awel kelma
+        this.isLoading = false; 
       });
     } catch (err) {
       console.error(err);

@@ -71,14 +71,15 @@ private apiUrl = 'http://localhost:8000/api/incidents';
     });
     return this.http.put<any>(`${this.apiUrl}/${id}/`, data, { headers });
   }
-  downloadRapport(incidentId: number) {
-    const token = localStorage.getItem('access_token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-    // N-7ottou responseType: 'blob' bch Angular y-fhem ennou m-ich JSON
-    return this.http.get(`${this.apiUrl}/${incidentId}/export_incident_pdf/`, {
-      responseType: 'blob',headers
-    });
-  }
+ downloadRapport(incidentId: number, formData: FormData) {
+  const token = localStorage.getItem('access_token');
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`
+  });
+
+  return this.http.post(`${this.apiUrl}/${incidentId}/export_incident_pdf/`, formData, {
+    responseType: 'blob',
+    headers: headers
+  });
+}
 }

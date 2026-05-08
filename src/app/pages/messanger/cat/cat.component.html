@@ -65,10 +65,9 @@
 </div>
   </aside>
 
-  <!-- ── MAIN AREA ── -->
   <main class="chat-main">
 
-    <!-- Empty state -->
+    
     <div class="empty-state" *ngIf="!selectedUser">
       <div class="empty-icon">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
@@ -79,7 +78,6 @@
       <p class="empty-sub">Sélectionne un analyste pour démarrer</p>
     </div>
 
-    <!-- Chat panel -->
     <ng-container *ngIf="selectedUser">
 
       <!-- Header -->

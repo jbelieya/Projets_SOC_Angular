@@ -5,10 +5,11 @@ import { FooterComponent } from './components/footer/footer.component';
 import { MenuComponent } from './components/menu/menu/menu.component';
 import { CommonModule } from '@angular/common';
 import { AiChatComponent } from './pages/ai-chat/ai-chat/ai-chat.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,NavbarComponent,MenuComponent,CommonModule,AiChatComponent],
+  imports: [RouterOutlet,NavbarComponent,MenuComponent,CommonModule,AiChatComponent,SidebarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

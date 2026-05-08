@@ -1,9 +1,17 @@
-<div class="flex items-center gap-2 mt-4 mb-4"> 
-    <p class="text-2xl font-bold m-0">{{mttr}}</p>
-    <mat-icon class="!text-green-600">check_circle</mat-icon> 
-</div>
-<div class="flex items-center gap-1 opacity-80 text-xs">
-    <mat-icon class="!text-[16px] !h-[16px] !w-[16px] !text-green-600">trending_up</mat-icon>
-    <span class="font-bold text-green-600">+502</span> 
-    <span class="ml-1">in the last 28 days</span>
+<div class="flex flex-col">
+    <div class="flex items-center gap-2 mt-4 mb-2"> 
+        <p class="text-3xl font-bold m-0 val">{{ mttr() }}</p>
+        <span class="unit">min</span>
+      <mat-icon class="status-icon" [class.safe]="mttr() < 60" [class.warn]="mttr() >= 60">
+        {{ mttr() < 60 ? 'check_circle' : 'warning' }}
+      </mat-icon>
+    </div>
+
+    <div class="sub">
+      <svg class="trend-icon" viewBox="0 0 14 14" fill="none">
+        <polyline points="1,10 5,5 9,7 13,2" stroke="#34d399" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+      <span class="up">Avg</span>
+      <span class="text">for selected {{ currentType }}s</span>
+    </div>
 </div>

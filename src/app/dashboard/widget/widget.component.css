@@ -23,3 +23,51 @@
     margin-bottom: 16px;
     cursor: move;
 }
+.widget-label {
+    margin: 0;
+    
+    font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+    font-size: 1.1rem; 
+    font-weight: 600; 
+    
+    letter-spacing: 0.25px;
+    
+    text-transform: capitalize;
+    
+    color: inherit;
+    opacity: 0.95;
+    
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    position: relative;
+    padding-bottom: 2px;
+}
+
+.widget-label::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 20px; 
+    height: 2px;
+    background-color: #007bff; 
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.container:hover .widget-label::after {
+    width: 35px;
+}
+.card{background:#0e2a3d;
+    border:0.5px solid rgba(255,255,255,0.08);
+    border-radius:12px;
+    padding:16px;
+    position:relative;
+    overflow:hidden
+}
+.card-top{height:2px;position:absolute;top:0;left:0;right:0}
+.lbl{font-size:10px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:#5a7a96;margin-bottom:8px}
+
+

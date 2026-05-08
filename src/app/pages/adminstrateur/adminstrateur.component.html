@@ -1,0 +1,200 @@
+<!-- src/app/admin/user-management/user-management.component.html -->
+<div class="admin-page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1>Gestion des utilisateurs</h1>
+      <p class="subtitle">{{ stats?.total }} utilisateur(s) enregistré(s)</p>
+    </div>
+    <button class="btn primary" (click)="openModal()">+ Nouvel utilisateur</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid" *ngIf="stats">
+    <div class="stat-card">
+      <span class="label">Total</span>
+      <span class="value">{{ stats.total }}</span>
+    </div>
+    <div class="stat-card">
+      <span class="label">Approuvés</span>
+      <span class="value approved">{{ stats.approved }}</span>
+    </div>
+    <div class="stat-card">
+      <span class="label">En attente</span>
+      <span class="value pending">{{ stats.pending }}</span>
+    </div>
+    <div class="stat-card">
+      <span class="label">En ligne</span>
+      <span class="value online">{{ stats.online }}</span>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()"
+           placeholder="Rechercher par nom, email..." class="search-input">
+    <select [(ngModel)]="roleFilter" (ngModelChange)="applyFilters()">
+      <option value="">Tous les rôles</option>
+      <option value="admin">Administrateur</option>
+      <option value="ANALYSTE_N1">Analyste N1</option>
+      <option value="ANALYSTE_N2">Analyste N2</option>
+      <option value="manager">Manager SOC</option>
+    </select>
+    <select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+      <option value="">Tout statut</option>
+      <option value="approved">Approuvés</option>
+      <option value="pending">En attente</option>
+      <option value="active">Actifs</option>
+      <option value="inactive">Inactifs</option>
+    </select>
+  </div>
+
+  <!-- Bulk actions bar -->
+  <div class="bulk-bar" *ngIf="selectedIds.size > 0">
+    <span>{{ selectedIds.size }} sélectionné(s)</span>
+    <button class="btn approve" (click)="bulkAction('approve')">Approuver</button>
+    <button class="btn" (click)="bulkAction('reject')">Rejeter</button>
+    <button class="btn" (click)="bulkAction('activate')">Activer</button>
+    <button class="btn danger" (click)="bulkAction('deactivate')">Désactiver</button>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th><input type="checkbox" (change)="toggleAll($event)"></th>
+          <th>Utilisateur</th>
+          <th>Rôle</th>
+          <th>Statut approbation</th>
+          <th>Compte</th>
+          <th>Connexion</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of filteredUsers" [class.selected]="selectedIds.has(user.id)">
+          <td>
+            <input type="checkbox" [checked]="selectedIds.has(user.id)"
+                   (change)="toggleRow(user.id, $event)">
+          </td>
+          <td>
+            <div class="user-cell">
+              <div class="avatar">{{ getInitials(user) }}</div>
+              <div>
+                <div class="user-name">{{ user.first_name }} {{ user.last_name }}</div>
+                <div class="user-email">{{ user.email }}</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="role-badge" [ngClass]="getRoleClass(user.role)">
+              {{ user.role_display }}
+            </span>
+          </td>
+          <td>
+            <span class="badge" [ngClass]="user.is_approved ? 'approved' : 'pending'">
+              {{ user.is_approved ? 'Approuvé' : 'En attente' }}
+            </span>
+          </td>
+          <td>
+            <span class="badge" [ngClass]="user.is_active ? 'active' : 'inactive'">
+              {{ user.is_active ? 'Actif' : 'Inactif' }}
+            </span>
+          </td>
+          <td>
+            <span class="badge" [ngClass]="user.is_online ? 'online' : 'offline'">
+              {{ user.is_online ? 'En ligne' : 'Hors ligne' }}
+            </span>
+          </td>
+          <td>
+            <div class="actions">
+              <button class="icon-btn"
+                      [title]="user.is_approved ? 'Rejeter' : 'Approuver'"
+                      (click)="toggleApprove(user)">
+                {{ user.is_approved ? '✕' : '✓' }}
+              </button>
+              <button class="icon-btn" title="Modifier" (click)="openModal(user)">✏</button>
+              <button class="icon-btn danger" title="Supprimer" (click)="deleteUser(user.id)">🗑</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="filteredUsers.length === 0">
+          <td colspan="7" class="empty">Aucun utilisateur trouvé</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="loading">Chargement...</div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h2>{{ editUser ? 'Modifier l\'utilisateur' : 'Nouvel utilisateur' }}</h2>
+
+    <form [formGroup]="userForm" (ngSubmit)="saveUser()">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Prénom</label>
+          <input formControlName="first_name" placeholder="Prénom">
+        </div>
+        <div class="form-group">
+          <label>Nom</label>
+          <input formControlName="last_name" placeholder="Nom">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Nom d'utilisateur *</label>
+        <input formControlName="username" placeholder="username">
+      </div>
+
+      <div class="form-group">
+        <label>Email *</label>
+        <input formControlName="email" type="email" placeholder="email@soc.tn">
+      </div>
+
+      <div class="form-group" *ngIf="!editUser">
+        <label>Mot de passe *</label>
+        <input formControlName="password" type="password" placeholder="••••••••">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Rôle</label>
+          <select formControlName="role">
+            <option value="ANALYSTE_N1">Analyste N1</option>
+            <option value="ANALYSTE_N2">Analyste N2</option>
+            <option value="manager">Manager SOC</option>
+            <option value="admin">Administrateur</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Téléphone</label>
+          <input formControlName="telephone" placeholder="+216 XX XXX XXX">
+        </div>
+      </div>
+
+      <div class="form-row checkboxes">
+        <label>
+          <input type="checkbox" formControlName="is_approved"> Approuvé
+        </label>
+        <label>
+          <input type="checkbox" formControlName="is_active"> Actif
+        </label>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn" (click)="closeModal()">Annuler</button>
+        <button type="submit" class="btn primary" [disabled]="userForm.invalid || saving">
+          {{ saving ? 'Enregistrement...' : 'Enregistrer' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

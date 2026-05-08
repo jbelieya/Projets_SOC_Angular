@@ -3,8 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DashboardItem } from '../../pages/module/dashboar';
 import { MTTDComponent } from '../../pages/dashboard/mttd/mttd.component';
-import { MttrComponent } from '../../pages/dashboard/mttr/mttr.component';
-import { MTTAComponent } from '../../dashboard/widget/mtta.component';
+import { MTTRComponent } from '../../pages/dashboard/mttr/mttr.component';import { MTTAComponent } from '../../dashboard/widget/mtta.component';
 import { FalsePositiveComponent } from '../../pages/dashboard/false_positive/false-positive/false-positive.component';
 import { TruePositivesComponent } from '../../pages/dashboard/true_positives/true-positives/true-positives.component';
 import { OpenIncidentsComponent } from '../../pages/dashboard/open_incidents/open-incidents/open-incidents.component';
@@ -27,16 +26,20 @@ export class KpisService {
          rows:1,
          columns:2,
          backgroundColor: '#003f5c',
-         color:'whitesmoke'
+         color:'whitesmoke',
+         moin:[],
+         year:[],
        },
       {
          id:2,
          label:'MTTR',
-         content:MttrComponent,
+         content:MTTRComponent,
          rows:1,
          columns:2,
          backgroundColor: '#003f5c',
-         color:'whitesmoke'
+         color:'whitesmoke',
+         moin:[],
+         year:[],
        },
        {
          id:3,
@@ -45,68 +48,174 @@ export class KpisService {
          rows:1,
          columns:2,
          backgroundColor: '#003f5c',
-         color:'whitesmoke'
-       },
-      {
-         id:4,
-         label:'false-positive',
-         content:FalsePositiveComponent,
-         rows:3,
-         columns:3,
+         color:'whitesmoke',
+         moin:[],
+         year:[],
        },
        {
-         id:5,
+         id:4,
          label:'true-positive',
          content:TruePositivesComponent,
          rows:3,
-         columns:3
+         columns:4,
+         moin:[],
+         year:[],
        },
        {
-         id:6,
+         id:5,
          label:'open-incident',
          content:OpenIncidentsComponent,
          rows:3,
-         columns:3
+         columns:3,
+         moin:[],
+         year:[],
        },
        {
-         id:7,
+         id:6,
          label:'closed-incident',
          content:ClosedIncidentsComponent,
          rows:3,
-         columns:3
+         columns:3,
+         moin:[],
+         year:[],
        },
       {
-         id:8,
+         id:7,
          label:'incident-by-site',
          content:IncidentsBySiteComponent,
          rows:3,
-         columns:3
+         columns:3,
+         moin:[],
+         year:[],
        },
        {
-         id:9,
+         id:8,
          label:'incident-by-type',
          content:TypeComponent,
          rows:3,
-         columns:3
+         columns:3,
+         moin:[],
+         year:[],
        },
        {
-         id:10,
+         id:9,
          label:'incident-by-categorie',
          content:CategorieComponent,
          rows:3,
-         columns:3
+         columns:3,
+         moin:[],
+         year:[],
        },
        {
-         id:11,
+         id:10,
          label:'incident-by-analyst',
          content:AnalystComponent,
          rows:3,
-         columns:3
+         columns:3,
+         moin:[],
+         year:[],
        },
       
       ]);
 
   addedWidgets = signal<DashboardItem[]>([
+    {
+      id:1,
+      label:'MTTD',
+      content:MTTDComponent,
+      rows:1,
+      columns:2,
+      backgroundColor: '#003f5c',
+      color:'whitesmoke',
+      moin:[],
+      year:[],
+    },
+   {
+      id:2,
+      label:'MTTR',
+      content:MTTRComponent,
+      rows:1,
+      columns:2,
+      backgroundColor: '#003f5c',
+      color:'whitesmoke',
+      moin:[],
+      year:[],
+    },
+    {
+      id:3,
+      label:'MTTA',
+      content:MTTAComponent,
+      rows:1,
+      columns:2,
+      backgroundColor: '#003f5c',
+      color:'whitesmoke',
+      moin:[],
+      year:[],
+    },
+    {
+      id:4,
+      label:'true-positive',
+      content:TruePositivesComponent,
+      rows:3,
+      columns:4,
+      moin:[],
+      year:[],
+    },
+    {
+      id:5,
+      label:'open-incident',
+      content:OpenIncidentsComponent,
+      rows:3,
+      columns:3,
+      moin:[],
+      year:[],
+    },
+    {
+      id:6,
+      label:'closed-incident',
+      content:ClosedIncidentsComponent,
+      rows:3,
+      columns:3,
+      moin:[],
+      year:[],
+    },
+   {
+      id:7,
+      label:'incident-by-site',
+      content:IncidentsBySiteComponent,
+      rows:3,
+      columns:3,
+      moin:[],
+      year:[],
+    },
+    {
+      id:8,
+      label:'incident-by-type',
+      content:TypeComponent,
+      rows:3,
+      columns:3,
+      moin:[],
+      year:[],
+    },
+    {
+      id:9,
+      label:'incident-by-categorie',
+      content:CategorieComponent,
+      rows:3,
+      columns:3,
+      moin:[],
+      year:[],
+    },
+    {
+      id:10,
+      label:'incident-by-analyst',
+      content:AnalystComponent,
+      rows:3,
+      columns:3,
+      moin:[],
+      year:[],
+    },
+   
   ]);
   
   widgetsToAdd = computed(()=> {
@@ -130,6 +239,8 @@ export class KpisService {
       const content = this.widgets().find(w => w.id === widget.id)?.content;
       if (content) {
         widget.content = content;
+        widget.moin = widget.moin ?? []; 
+        widget.year = widget.year ?? [];
       }
     })
     this.addedWidgets.set(widgets);

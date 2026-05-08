@@ -1,8 +1,9 @@
-import { Component, ElementRef, inject, OnInit, viewChild } from '@angular/core';
+import { Component, effect, ElementRef, inject, input, OnInit, signal, viewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import Chart from 'chart.js/auto'
 import { KpisService } from '../../../../services/KPIs/kpis.service';
 import ChartDataLabels from 'chartjs-plugin-datalabels'; 
+import { DashboardItem } from '../../../module/dashboar';
 
 @Component({
   selector: 'app-true-positives',
@@ -10,41 +11,64 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
   templateUrl: './true-positives.component.html',
   styleUrl: './true-positives.component.css'
 })
-export class TruePositivesComponent implements OnInit{
+export class TruePositivesComponent {
   store = inject(KpisService);
   chartRef = viewChild.required<ElementRef>('chart');
   myChart: any;
-
-  // Variable bch na3rfou ana type tawa
+  data = input.required<DashboardItem>();
   currentType: 'month' | 'year' = 'month';
-
-  ngOnInit() {
-    this.updateStats(); // N-lansiwha f-el bideya
+totalTrue = signal<number>(0);
+  totalFalse = signal<number>(0);
+  
+  truePercentage = signal<number>(0);
+  truePercentageLabel = signal<number>(0);
+  falsePercentageLabel = signal<number>(0);
+  constructor() {
+ effect(() => {
+      this.updateStats();
+    }); 
   }
+  
 
-  // Fonction bch t-baddel el type w t-lansi el API
   toggleType(type: 'month' | 'year') {
     this.currentType = type;
     this.updateStats();
   }
 
   updateStats() {
-    // 1. Ne5tarou el values 3ala 7asb el type
-    const values = this.currentType === 'month' 
-      ? [1, 2, 3, 4, 5, 6] // Chhour
-      : [2024, 2025, 2026]; // A3wem
+    let values: number[] = [];
+    const currentData = this.data();
+if (!currentData) return;
 
-    this.store.getKpiDatapro('get_true_positives_stats', this.currentType, values).subscribe({
-      next: (data) => {
-        // 2. Formatage mta3 el labels (Ken ch-har n-rodouh Ism, ken 3am nkhallouh kima houwa)
-        const labels = Object.keys(data).map(key => 
-          this.currentType === 'month' ? this.getMonthName(key) : key
-        );
-        const valuesData = Object.values(data);
+if (this.currentType === 'month') {
+  values = (currentData.moin && currentData.moin.length > 0) 
+           ? currentData.moin 
+           : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; // Default: kol el chhour
+} else {
+  values = (currentData.year && currentData.year.length > 0) 
+           ? currentData.year 
+           : [2024, 2025, 2026]; 
+}
+    this.store.getKpiDatapro('false_positive_rate', this.currentType, values).subscribe({
+      next: (falseData) => {
+        this.store.getKpiDatapro('get_true_positives_stats', this.currentType, values).subscribe({
+          next: (trueData) => {
+            const fSum = Object.values(falseData).reduce((a: any, b: any) => a + b, 0) as number;
+            const tSum = Object.values(trueData).reduce((a: any, b: any) => a + b, 0) as number;
+            
+            this.totalFalse.set(fSum);
+            this.totalTrue.set(tSum);
 
-        this.createChart(labels, valuesData);
-      },
-      error: (err) => console.error('Error', err)
+            const total = fSum + tSum;
+            if (total > 0) {
+              const tPercent = Math.round((tSum / total) * 100);
+              this.truePercentageLabel.set(tPercent);
+              this.falsePercentageLabel.set(100 - tPercent);
+              this.truePercentage.set((tPercent / 100) * 150.8);
+            }
+          }
+        });
+      }
     });
   }
 
@@ -56,7 +80,7 @@ export class TruePositivesComponent implements OnInit{
 
     this.myChart = new Chart(this.chartRef().nativeElement, {
       type: 'bar',
-      plugins: [ChartDataLabels], // <--- Activate the plugin here
+      plugins: [ChartDataLabels],
       data: {
         labels: labels,
         datasets: [{

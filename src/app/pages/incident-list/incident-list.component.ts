@@ -3,13 +3,13 @@ import { IncidentService } from '../../services/incident.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // Mouchkour bch t-khdem el form inline
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { HostListener } from '@angular/core';
 @Component({
   selector: 'app-incident-list',
   standalone: true, // A3melha standalone
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './incident-list.component.html',
   styleUrl: './incident-list.component.css'
 })
@@ -18,6 +18,8 @@ openCloseModal(_t14: any) {
 throw new Error('Method not implemented.');
 }
 isLoading = false;
+searchTerm: string = '';
+filteredIncidents: any[] = [];
   incidents: any[] = [];
   editingContext = { incidentId: null as number | null, field: null as string | null };
   showCreateModal = false; // Bch t-controle el modal mta3 el création
@@ -56,7 +58,7 @@ getStatusStyles(status: string): string {
     this.incidentService.getAll().subscribe({
        next: (data) => {
       this.incidents = data
-      // Toast notification (sghira w ndhifa)
+      this.filteredIncidents = [...this.incidents];
       Swal.fire({
         icon: 'success',
         title: 'Done!',
@@ -89,7 +91,21 @@ getStatusStyles(status: string): string {
   });
      
   }
+filterIncidents() {
+  const term = this.searchTerm.toLowerCase().trim();
 
+  if (!term) {
+    this.filteredIncidents = [...this.incidents];
+    return;
+  }
+
+  this.filteredIncidents = this.incidents.filter(incident => 
+    incident.host_name?.toLowerCase().includes(term) ||
+    incident.user_name_display?.toLowerCase().includes(term) ||
+    incident.id?.toString().includes(term) ||
+    incident.titre?.toLowerCase().includes(term)
+  );
+}
 editIncident(incident: any): void { 
   // Houni l-logic mta3ek mrigla
   console.log('Editing incident:', incident);
@@ -259,20 +275,22 @@ updateIncidentField(incident: any) {
     }
   });
 }
-onExportRapport(id: number) {
-    this.incidentService.downloadRapport(id).subscribe({
-      next: (blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Incident_Report_${id}.pdf`; // Esm el fichier 3and el user
-        a.click();
-        window.URL.revokeObjectURL(url); // N-nadhou el mémoire
-      },
-      error: (err) => {
-        console.error("Erreur lors de l'export PDF", err);
-        alert("Impossible de générer le rapport pour le moment.");
-      }
-    });
+
+  getSeverityClass(level: string) {
+  switch (level) {
+    case 'Critical': return 'sev-critical';
+    case 'High': return 'sev-high';
+    case 'Medium': return 'sev-medium';
+    case 'Low': return 'sev-low';
+    default: return 'sev-low';
   }
+}
+getEscalationClass(level: string) {
+  switch (level) {
+    case 'L1': return 'esc-l1';
+    case 'L2': return 'esc-l2';
+    case 'L3': return 'esc-l3';
+    default: return '';
+  }
+}
 }

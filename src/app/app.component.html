@@ -2,18 +2,26 @@
   
   <app-navbar class="z-50 shrink-0"></app-navbar>
 
-  <div class="z-40 border-b shrink-0">
-     <app-menu [(collapsed)]="collapsed"></app-menu>
+  <div class="z-40 shrink-0">
+    <app-menu [(collapsed)]="collapsed"></app-menu>
   </div>
 
-  <main class="flex-1 overflow-y-auto">
-    <router-outlet></router-outlet>
-  </main>
+  <div class="flex flex-1 overflow-hidden">
+    
+    <aside
+      [class.w-64]="!collapsed()"
+      [class.w-0]="collapsed()"
+      class="transition-all duration-300 ease-in-out shrink-0 overflow-hidden">
+      
+      <app-sidebar></app-sidebar>
 
+    </aside>
+
+    <main class="flex-1 overflow-y-auto p-4">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
 </div>
+
 <app-ai-chat></app-ai-chat>
-
-
-
-
-

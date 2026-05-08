@@ -1,0 +1,221 @@
+/* ═══════════════════════════════════════════
+   SOC Admin — User Management (Improved)
+   ═══════════════════════════════════════════ */
+
+* { box-sizing: border-box; }
+
+.admin-page {
+  padding: 2rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  background-color: var(--sys-background);
+}
+
+/* ── Header ────────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--sys-on-background);
+  margin: 0;
+}
+
+.page-header .subtitle {
+  font-size: 14px;
+  color: var(--sys-on-surface-variant);
+  margin-top: 4px;
+}
+
+/* ── Stats Cards ───────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--sys-surface);
+  border: 1px solid var(--sys-outline);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.stat-card .label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--sys-on-surface-variant);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.stat-card .value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--sys-on-surface);
+}
+
+/* Couleurs spécifiques pour les stats */
+.value.approved { color: #10b981; } /* Emerald */
+.value.pending  { color: #f59e0b; } /* Amber */
+.value.online   { color: #3b82f6; } /* Blue */
+
+/* ── Toolbar & Filters ─────────────────────── */
+.toolbar {
+  background: var(--sys-surface);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--sys-outline);
+  display: flex;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+
+.toolbar input, .toolbar select {
+  background: var(--sys-background);
+  border: 1px solid var(--sys-outline);
+  color: var(--sys-on-surface);
+  border-radius: 8px;
+  height: 40px;
+  padding: 0 12px;
+  font-size: 13px;
+}
+
+.toolbar input:focus {
+  border-color: var(--sys-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* ── Table Styling ─────────────────────────── */
+.table-wrap {
+  background: var(--sys-surface);
+  border-radius: 12px;
+  border: 1px solid var(--sys-outline);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th {
+  background: var(--sys-surface-container-low);
+  padding: 14px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sys-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--sys-outline);
+}
+
+table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--sys-outline-variant);
+  font-size: 13px;
+  color: var(--sys-on-surface);
+}
+
+table tr:hover td {
+  background-color: var(--sys-surface-container-lowest);
+}
+
+/* ── Badges & Chips (The "Mridhla" Part) ───── */
+.badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+}
+
+/* Statut Approbation */
+.badge.approved { background: #d1fae5; color: #065f46; }
+.badge.pending   { background: #fef3c7; color: #92400e; }
+
+/* Statut Compte */
+.badge.active   { background: #dbeafe; color: #1e40af; }
+.badge.inactive { background: #fee2e2; color: #991b1b; }
+
+/* Rôles */
+.role-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--sys-surface-container-high);
+}
+
+.role-badge.role-admin { background: #ede9fe; color: #5b21b6; }
+.role-badge.role-manager { background: #ffedd5; color: #9a3412; }
+
+/* ── Avatars ───────────────────────────────── */
+.avatar {
+  width: 34px;
+  height: 34px;
+  background: var(--sys-primary-container);
+  color: var(--sys-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* ── Actions ───────────────────────────────── */
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  margin: 0 2px;
+  border-radius: 8px;
+  border: 1px solid var(--sys-outline);
+  background: var(--sys-surface);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.icon-btn:hover {
+  background: var(--sys-primary-container);
+  color: var(--sys-primary);
+  border-color: var(--sys-primary);
+}
+
+.icon-btn.danger:hover {
+  background: #fee2e2;
+  color: #ef4444;
+  border-color: #fca5a5;
+}
+
+/* ── Modal Design ──────────────────────────── */
+.modal {
+  background: var(--sys-surface);
+  border-radius: 16px;
+  padding: 2rem;
+  border: none;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.modal h2 {
+  font-size: 20px;
+  margin-bottom: 1.5rem;
+  color: var(--sys-on-surface);
+}

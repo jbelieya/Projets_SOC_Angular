@@ -1,24 +1,18 @@
-/* 1. Tailwind v4 Import */
 @use "tailwindcss";
 
 @use '@angular/material' as mat;
 
 @include mat.core();
-/* 2. Angular Material 19 Prebuilt Theme */
-/* Jarreb hadha, houwa l-path el s7i7 l-v19 */
 
-/* 3. Global Styles */
 html, body {
   margin: 0;
   padding: 0;
+  overflow: hidden;
   height: 100%;
-  /* Material i-7eb Roboto bch l-icons wel spacing i-jiw s7a7 */
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-/* 4. Fix le-szayed (Specificité) */
 .mat-icon {
-  /* Tailwind v4 sa3at i-ghatti 3al icon size */
   font-family: 'Material Icons' !important;
 }
 .cdk-drop-list-dragging {
@@ -27,7 +21,22 @@ html, body {
     padding-left: 8px;
 }
 
+.mat-drawer-container, 
+.mat-sidenav-container, 
+.mat-drawer, 
+mat-sidenav {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important; 
+}
 
+.mat-drawer-side {
+    border-right: none !important;
+}
+
+.mat-drawer-backdrop.mat-drawer-shown {
+    background-color: transparent !important;
+}
 $custom-theme: mat.define-theme(
   (
   color: (
@@ -39,93 +48,55 @@ $custom-theme: mat.define-theme(
 );
 
 :root {
-  /* Clean White-Gray Background */
   --sys-background: rgb(248, 250, 252); /* Abyedh 3ati 3al Gris (Slate 50) */
   --sys-surface: rgb(255, 255, 255);     /* Pure White lel Cards */
-  
-  /* Primary Color - Indigo/Blue (Professional App standard) */
   --sys-primary: rgb(79, 70, 229);      /* El Lon el Indigo mta3 Coficab */
   --sys-on-primary: rgb(255, 255, 255);
   --sys-primary-container: rgb(238, 242, 255);
   --sys-on-primary-container: rgb(67, 56, 202);
-
-  /* Typography Colors (Slate/Zinc) */
   --sys-on-background: rgb(15, 23, 42);  /* Dark Slate lel ktiba */
   --sys-on-surface: rgb(15, 23, 42);
   --sys-on-surface-variant: rgb(100, 116, 139); /* Gris lel sub-titles */
-
-  /* Borders & Outlines */
   --sys-outline: rgb(226, 232, 240);    /* Gris deghfa lel borders */
   --sys-outline-variant: rgb(241, 245, 249);
-
-  /* Functional Colors */
   --sys-error: rgb(239, 68, 68);        /* Red lel alerts */
   --sys-tertiary: rgb(34, 197, 94);     /* Green lel True Positives */
-
-  /* Surface Containers (Professional Depth) */
   --sys-surface-container-lowest: rgb(255, 255, 255);
   --sys-surface-container-low: rgb(248, 250, 252);
   --sys-surface-container: rgb(241, 245, 249);
   --sys-surface-container-high: rgb(226, 232, 240);
   --sys-surface-container-highest: rgb(203, 213, 225);
+  --icon-grad-profile-start: #a855f7; /* Purple 500 */
+  --icon-grad-profile-end: #ec4899;   /* Pink 500 */
+  
+  --icon-grad-incidents-start: #3b82f6; /* Blue 500 */
+  --icon-grad-incidents-end: #a855f7;   /* Purple 500 */
+  
+  --icon-grad-messanger-start: #f59e0b; /* Amber 500 */
+  --icon-grad-messanger-end: #ef4444;   /* Red 500 */
+  
+  --icon-grad-logout-start: #ef4444; /* Red 500 */
+  --icon-grad-logout-end: #f97316;   /* Orange 500 */
 }
-.dark {
-  --sys-primary: rgb(242 220 130);
-  --sys-surface-tint: rgb(219 198 110);
-  --sys-on-primary: rgb(45 37 0);
-  --sys-primary-container: rgb(163 144 63);
-  --sys-on-primary-container: rgb(0 0 0);
-  --sys-secondary: rgb(232 220 182);
-  --sys-on-secondary: rgb(43 37 12);
-  --sys-secondary-container: rgb(154 145 111);
-  --sys-on-secondary-container: rgb(0 0 0);
-  --sys-tertiary: rgb(191 230 200);
-  --sys-on-tertiary: rgb(8 44 24);
-  --sys-tertiary-container: rgb(117 153 127);
-  --sys-on-tertiary-container: rgb(0 0 0);
-  --sys-error: rgb(255 210 204);
-  --sys-on-error: rgb(84 0 3);
-  --sys-error-container: rgb(255 84 73);
-  --sys-on-error-container: rgb(0 0 0);
-  --sys-background: rgb(21 19 11);
-  --sys-on-background: rgb(232 226 212);
-  --sys-surface: rgb(21 19 11);
-  --sys-on-surface: rgb(255 255 255);
-  --sys-surface-variant: rgb(75 71 57);
-  --sys-on-surface-variant: rgb(227 220 202);
-  --sys-outline: rgb(184 177 160);
-  --sys-outline-variant: rgb(150 144 128);
-  --sys-shadow: rgb(0 0 0);
-  --sys-scrim: rgb(0 0 0);
-  --sys-inverse-surface: rgb(232 226 212);
-  --sys-inverse-on-surface: rgb(45 42 33);
-  --sys-inverse-primary: rgb(85 71 0);
-  --sys-primary-fixed: rgb(248 226 135);
-  --sys-on-primary-fixed: rgb(22 17 0);
-  --sys-primary-fixed-dim: rgb(219 198 110);
-  --sys-on-primary-fixed-variant: rgb(64 54 0);
-  --sys-secondary-fixed: rgb(238 226 188);
-  --sys-on-secondary-fixed: rgb(22 17 0);
-  --sys-secondary-fixed-dim: rgb(209 198 161);
-  --sys-on-secondary-fixed-variant: rgb(60 54 27);
-  --sys-tertiary-fixed: rgb(197 236 206);
-  --sys-on-tertiary-fixed: rgb(0 21 8);
-  --sys-tertiary-fixed-dim: rgb(169 208 179);
-  --sys-on-tertiary-fixed-variant: rgb(27 61 40);
-  --sys-surface-dim: rgb(21 19 11);
-  --sys-surface-bright: rgb(72 68 58);
-  --sys-surface-container-lowest: rgb(9 7 3);
-  --sys-surface-container-low: rgb(32 29 21);
-  --sys-surface-container: rgb(42 40 31);
-  --sys-surface-container-high: rgb(53 50 41);
-  --sys-surface-container-highest: rgb(65 61 52);
+
+ .dark {
+  --sys-background: #040a29;
+  --sys-surface: #0f172a;
+  --sys-surface-container-low: #1e293b;
+  --sys-on-surface:#8c8f93;        
+  --sys-on-surface-variant: #94a3b8;
+  --sys-outline: #334155;           
+  --sys-primary:#475569;
+  --sys-surface-container-high:  #1e293b;
+  --sys-outline-variant: #334155;
   color-scheme: dark;
 }
 
 
+
 html{
   background-color: var(--sys-background);
-  color: var(--sys-on-background);
+  color: var(--sys-on-surface);
   @include mat.core-theme($custom-theme);
   @include mat.toolbar-theme($custom-theme);
   @include mat.button-theme($custom-theme);

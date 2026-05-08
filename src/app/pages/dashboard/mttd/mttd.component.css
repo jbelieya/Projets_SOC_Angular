@@ -12,3 +12,42 @@
   color: #2e7d32 !important; 
   font-weight: 600;
 }
+.val{font-size:28px;font-weight:500;color:#e8f2fa;line-height:1}
+.unit {
+  font-size: 14px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.status-icon {
+  margin-left: 8px;
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+}
+
+.safe { color: #10b981; } /* Green 500 */
+.warn { color: #f59e0b; } /* Amber 500 */
+
+/* الـ Footer (Trend) */
+.sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.trend-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.up {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.text {
+  color: #94a3b8;
+}

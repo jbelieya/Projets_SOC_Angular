@@ -1,9 +1,10 @@
-import { Component, ElementRef, inject, viewChild } from '@angular/core';
+import { Component, effect, ElementRef, inject, input, viewChild } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { KpisService } from '../../../../services/KPIs/kpis.service';
 import { Chart } from 'chart.js/auto';
 import { MatButtonModule } from '@angular/material/button';
 import ChartDataLabels from 'chartjs-plugin-datalabels'; 
+import { DashboardItem } from '../../../module/dashboar';
 
 @Component({
   selector: 'app-false-positive',
@@ -12,15 +13,17 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
   styleUrl: './false-positive.component.css'
 })
 export class FalsePositiveComponent {
+  data = input.required<DashboardItem>();
  store = inject(KpisService);
   chartRef = viewChild.required<ElementRef>('chart');
   myChart: any;
-
   // Variable bch na3rfou ana type tawa
   currentType: 'month' | 'year' = 'month';
 
-  ngOnInit() {
-    this.updateStats(); // N-lansiwha f-el bideya
+  constructor() {
+    effect(() => {
+      this.updateStats();
+    });
   }
 
   // Fonction bch t-baddel el type w t-lansi el API
@@ -31,10 +34,20 @@ export class FalsePositiveComponent {
 
   updateStats() {
     // 1. Ne5tarou el values 3ala 7asb el type
-    const values = this.currentType === 'month' 
-      ? [1, 2, 3, 4, 5, 6] // Chhour
-      : [2024, 2025, 2026]; // A3wem
+    let values: number[] = [];
+    
+    const currentData = this.data();
+  if (!currentData) return;
 
+  if (this.currentType === 'month') {
+    values = (currentData.moin && currentData.moin.length > 0) 
+             ? currentData.moin 
+             : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; // Default: kol el chhour
+  } else {
+    values = (currentData.year && currentData.year.length > 0) 
+             ? currentData.year 
+             : [2024, 2025, 2026]; 
+  }
     this.store.getKpiDatapro('false_positive_rate', this.currentType, values).subscribe({
       next: (data) => {
         // 2. Formatage mta3 el labels (Ken ch-har n-rodouh Ism, ken 3am nkhallouh kima houwa)

@@ -1,0 +1,116 @@
+<div class="report-page-container bg-gray-200 p-10 min-h-screen flex flex-col items-center">
+  
+  <div class="w-[800px] mb-4 flex justify-between items-center bg-white p-4 rounded-lg shadow-sm">
+    <h1 class="font-bold text-gray-700 uppercase text-sm tracking-widest">SOC Report Generator</h1>
+    <button (click)="exportToPDF()" [disabled]="isLoading"
+            class="bg-[#001f3f] text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-900 flex items-center gap-2 transition-all">
+      <i class="material-icons text-sm">picture_as_pdf</i>
+      {{ isLoading ? 'Generating PDF...' : 'Export Official Report' }}
+    </button>
+  </div>
+
+  <div class="a4-sheet bg-white shadow-2xl p-0 overflow-hidden relative" id="report-content">
+    
+    <div class="bg-[#001f3f] h-[60px] flex items-center px-8 relative">
+      <span class="text-white font-bold text-xl tracking-tighter">COFICAB</span>
+      <div class="absolute left-1/2 -translate-x-1/2 text-white font-bold text-[10px] uppercase text-center">
+        Multiple threat families detected on {{ incident.host_name }}
+      </div>
+      <div class="ml-auto text-white text-[8px] text-right">
+        {{ incident.date_detection | date:'dd/MM/yyyy' }}<br>SOC CONFIDENTIEL
+      </div>
+    </div>
+    <div class="h-[5px] bg-red-600 w-full"></div>
+
+    <div class="p-10 space-y-6">
+      <p class="text-[11px] text-gray-800 font-medium">Dear colleagues, <br> Following the analysis of the incident, please find below a summary of the incident.</p>
+
+      <div class="grid grid-cols-3 border border-gray-400">
+        <div class="border-r border-b p-1.5 bg-[#001f3f] text-white text-[8px] font-bold uppercase">Severity Level</div>
+        <div class="border-r border-b p-1.5 bg-[#001f3f] text-white text-[8px] font-bold uppercase">Plant Name</div>
+        <div class="border-b p-1.5 bg-[#001f3f] text-white text-[8px] font-bold uppercase">Host Name</div>
+        
+        <div class="border-r border-b p-2 text-xs font-bold" [ngClass]="incident.severity_level === 'High' ? 'text-red-600' : 'text-gray-800'">{{ incident.severity_level }}</div>
+        <div class="border-r border-b p-2 text-xs">{{ incident.plant_name }}</div>
+        <div class="border-b p-2 text-xs">{{ incident.host_name }}</div>
+
+        <div class="border-r border-b p-1.5 bg-[#001f3f] text-white text-[8px] font-bold uppercase">Category</div>
+        <div class="border-r border-b p-1.5 bg-[#001f3f] text-white text-[8px] font-bold uppercase">Raised By</div>
+        <div class="border-b p-1.5 bg-[#001f3f] text-white text-[8px] font-bold uppercase">User Name</div>
+
+        <div class="border-r border-b p-2 text-xs">Application</div>
+        <div class="border-r border-b p-2 text-xs">{{ incident.raised_by }}</div>
+        <div class="border-b p-2 text-xs">{{ incident.user_name }}</div>
+
+        <div class="border-r p-1.5 bg-[#001f3f] text-white text-[8px] font-bold uppercase">Incident ID</div>
+        <div class="border-r p-1.5 bg-[#001f3f] text-white text-[8px] font-bold uppercase">Incident Status</div>
+        <div class="p-1.5 bg-red-600 text-white text-[8px] font-bold uppercase">Host Status</div>
+
+        <div class="border-r p-2 text-xs font-mono">{{ incident.id_incident }}</div>
+        <div class="border-r p-2 text-xs">Open</div>
+        <div class="p-2 text-xs font-bold text-red-600">{{ incident.host_state }}</div>
+      </div>
+
+      <div class="grid grid-cols-4 mt-4 border border-gray-400 h-[100px]">
+        <div class="col-span-3 p-4 flex flex-col justify-between">
+           <span class="text-[9px] font-bold uppercase text-gray-500">Remediation Steps Taken:</span>
+           <textarea [(ngModel)]="incident.remediation_destination" 
+                     class="w-full h-full text-xs border-none outline-none resize-none"
+                     placeholder="Describe actions taken to remediate..."></textarea>
+        </div>
+        <div class="border-l border-gray-400 bg-gray-50">
+          <div class="bg-[#001f3f] text-white text-[8px] p-1 text-center font-bold uppercase">Remediation Owner</div>
+          <div class="flex items-center justify-center h-full text-xs font-bold text-[#001f3f]">
+            {{ incident.plant_name }} IT Team
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <label class="block font-bold text-[#001f3f] text-[10px] mb-2 uppercase tracking-wider">Investigation Analysis & Findings</label>
+        <textarea [(ngModel)]="incident.description_investigation" 
+                  rows="8" 
+                  class="w-full border border-gray-300 rounded p-4 text-xs leading-relaxed outline-none focus:border-red-600 transition-all"
+                  placeholder="Type investigation details..."></textarea>
+      </div>
+
+      <div class="mt-4">
+  <label class="block font-bold text-[#001f3f] text-[10px] mb-2 uppercase tracking-wider">Evidence Gallery</label>
+  
+  <div (click)="fileInput.click()" 
+       class="border-2 border-dashed border-gray-200 rounded-xl h-[120px] flex flex-col items-center justify-center text-gray-400 hover:bg-gray-50 cursor-pointer transition-all">
+    
+    <input #fileInput 
+           type="file" 
+           (change)="onFileSelected($event)" 
+           style="display: none;" 
+           accept="image/*">
+    
+    <i class="material-icons text-3xl">add_a_photo</i>
+    <span class="text-[10px] mt-2 font-medium">Click to upload Evidence Screenshots</span>
+    
+    <div *ngIf="selectedImageName" class="mt-2 text-emerald-600 text-[10px] font-bold">
+       ✅ Selected: {{ selectedImageName }}
+    </div>
+  </div>
+
+  <div *ngIf="selectedImage" class="mt-4 text-center">
+      <img [src]="selectedImage" class="max-h-[150px] mx-auto rounded shadow-md border p-1 bg-white">
+  </div>
+</div>
+
+    <div class="absolute bottom-10 left-10 right-10">
+      <div class="grid grid-cols-4 border border-gray-400 text-center">
+        <div class="bg-[#001f3f] text-white text-[8px] p-1.5 border-r border-white/20 uppercase font-bold">First event</div>
+        <div class="bg-[#001f3f] text-white text-[8px] p-1.5 border-r border-white/20 uppercase font-bold">Acknowledge</div>
+        <div class="bg-[#001f3f] text-white text-[8px] p-1.5 border-r border-white/20 uppercase font-bold">Analyst</div>
+        <div class="bg-[#001f3f] text-white text-[8px] p-1.5 uppercase font-bold">Reviewer</div>
+        
+        <div class="p-2 text-[10px] border-r border-gray-400">{{ incident.first_event | date:'dd/MM/yyyy' }}</div>
+        <div class="p-2 text-[10px] border-r border-gray-400">{{ incident.date_detection | date:'dd/MM/yyyy' }}</div>
+        <div class="p-2 text-[10px] border-r border-gray-400 font-bold">{{ incident.user_name }}</div>
+        <div class="p-2 text-[10px]">Security Manager</div>
+      </div>
+    </div>
+  </div>
+</div>

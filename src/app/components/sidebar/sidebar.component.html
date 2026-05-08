@@ -1,1 +1,34 @@
-<p>sidebar works!</p>
+<div class="sidebar">
+  <div class="profile-section">
+    <div class="avatar-container">
+      <div class="big-logo" [style.background-color]="'hsl(' + getHue(+(currentUserId || 0)) + ', 70%, 40%)'">
+        {{ userProfile?.username?.charAt(0).toUpperCase() }}
+      </div>
+    </div>
+    <div class="user-info">
+      <h3>{{ userProfile?.username }}</h3>
+      <p class="email">{{ userProfile?.email }}</p>
+      <span class="role-badge">{{ userProfile?.role }}</span>
+    </div>
+  </div>
+
+ <nav class="nav-menu">
+    <a routerLink="/app/Profile" routerLinkActive="active" class="nav-item">
+      <i class="fas fa-user-circle"></i> <span>Mon Profil</span>
+    </a>
+    
+    <a routerLink="/app/messanger" routerLinkActive="active" class="nav-item">
+      <i class="fas fa-comments"></i> <span>Messager</span>
+    </a>
+
+    <a routerLink="/app/incidents" routerLinkActive="active" class="nav-item">
+      <i class="fas fa-shield-alt"></i> <span>Incidents SOC</span>
+    </a>
+
+    <div class="bottom-links">
+      <a (click)="logout()" class="nav-item logout">
+        <i class="fas fa-sign-out-alt"></i> <span>Déconnexion</span>
+      </a>
+    </div>
+  </nav>
+</div>

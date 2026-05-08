@@ -1,0 +1,17 @@
+.a4-sheet {
+  width: 800px; 
+  height: 1130px; 
+  min-height: 1130px;
+  background: white;
+}
+
+textarea {
+  background: #fcfcfc;
+  line-height: 1.6;
+}
+
+@media print {
+  body * { visibility: hidden; }
+  #report-content, #report-content * { visibility: visible; }
+  #report-content { position: absolute; left: 0; top: 0; }
+}

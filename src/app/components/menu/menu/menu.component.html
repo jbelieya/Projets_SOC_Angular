@@ -1,51 +1,41 @@
-<mat-toolbar class="mat-elevation-z3">
-    <button mat-icon-button (click)="collapsed.set(!collapsed())">
-        <mat-icon>menu</mat-icon>
+<mat-toolbar class="soc-toolbar">
+  <div class="left-section">
+    <button mat-icon-button (click)="collapsed.set(!collapsed())" class="menu-btn">
+      <mat-icon>menu</mat-icon>
     </button>
-    <div class="h-12 border-b border-slate-200 px-6 flex items-center gap-8 sticky top-16 z-40">
-  
-  <a routerLink="/app/dashboard" 
-     routerLinkActive="text-[#4f46e5] border-b-2 border-[#4f46e5]" 
-     class="h-full flex items-center px-2 text-[13px] font-bold text-slate-600 hover:text-[#4f46e5] transition-all cursor-pointer no-underline">
-    <i class="fas fa-chart-line mr-2"></i> Dashboard
-  </a>
-
-  <a routerLink="/app/incidents" 
-     routerLinkActive="text-[#4f46e5] border-b-2 border-[#4f46e5]" 
-     class="h-full flex items-center px-2 text-[13px] font-bold text-slate-600 hover:text-[#4f46e5] transition-all cursor-pointer no-underline">
-    <i class="fas fa-shield-alt mr-2"></i> Incidents
-  </a>
-
-  <a routerLink="/app/messanger" 
-     routerLinkActive="text-[#4f46e5] border-b-2 border-[#4f46e5]" 
-     class="h-full flex items-center px-2 text-[13px] font-bold text-slate-600 hover:text-[#4f46e5] transition-all cursor-pointer no-underline">
-    <i class="fas fa-user-shield mr-2"></i> Analysts
-  </a>
-
-  <a routerLink="/app/admin/logs" 
-   routerLinkActive="text-[#4f46e5] border-b-2 border-[#4f46e5] bg-indigo-50/50" 
-   class="h-full flex items-center px-4 text-[13px] font-semibold text-slate-600 hover:text-[#4f46e5] hover:bg-slate-50 transition-all duration-200 cursor-pointer no-underline group">
-  
-  <i class="fas fa-history mr-2 text-[15px] group-hover:rotate-[-20deg] transition-transform"></i> 
-  
-  <span>Historique Audit</span>
-</a>
-  <a routerLink="/login" 
-     routerLinkActive="text-[#4f46e5] border-b-2 border-[#4f46e5]" 
-     class="h-full flex items-center px-2 text-[13px] font-bold text-slate-600 hover:text-[#4f46e5] transition-all cursor-pointer no-underline">
-    <i class="fas fa-file-alt mr-2"></i> Contacts
-  </a>
-
-  <div class="flex-1"></div>
-
-  <div class="flex items-center gap-2 text-slate-400 text-[11px] font-bold uppercase tracking-wider">
-    <i class="far fa-calendar-alt"></i>
-    <span>Last 24 Hours</span>
-    <i class="fas fa-chevron-down text-[9px]"></i>
   </div>
+
+  <span class="spacer"></span> 
+ <div class="nav-links">
+  <a routerLink="/app/dashboard" routerLinkActive="active" class="nav-link">
+    <i class="fas fa-chart-line"></i> <span>Dashboard</span>
+  </a>
+  <a routerLink="/app/incidents" routerLinkActive="active" class="nav-link">
+    <i class="fas fa-shield-alt"></i> <span>Incidents</span>
+  </a>
+  <a routerLink="/app/messanger" routerLinkActive="active" class="nav-link">
+   <i class="fas fa-comments"></i> <span>Messager</span>
+  </a>
+  <a routerLink="/app/admin/logs" routerLinkActive="active" class="nav-link">
+    <i class="fas fa-history"></i> <span>Audit</span>
+  </a>
+  <a *ngIf="userProfile?.role === 'admin'"
+  routerLink="/app/admin/admin"
+  routerLinkActive="active"
+  class="nav-link">
+  <i class="fas fa-history"></i>
+  <span>Administrateur</span>
+</a>
 </div>
-    <span class="spacer"></span> <button mat-icon-button (click)="darkMode.set(!darkMode())">
-        <mat-icon *ngIf="darkMode()">light_mode</mat-icon>
-        <mat-icon *ngIf="!darkMode()">dark_mode</mat-icon>
+
+  <span class="spacer"></span> <div class="right-section">
+    <div class="time-filter">
+  <i class="far fa-calendar-alt"></i>
+  <span>{{ todayDate | date:'mediumDate' }}</span>
+  <i class="fas fa-chevron-down drop-icon ml-2"></i>
+</div>
+    <button mat-icon-button (click)="darkMode.set(!darkMode())" class="theme-toggle">
+      <mat-icon>{{ darkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
     </button>
+  </div>
 </mat-toolbar>

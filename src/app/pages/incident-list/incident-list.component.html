@@ -1,109 +1,160 @@
- <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-2xl border border-gray-100 shadow-sm"
+ <div class="page"
  style="background-color: var(--sys-background);">
-  
-  <div>
-    <h2 class="text-xl font-bold text-gray-900">Active Incidents</h2>
-    <p class="text-[11px] text-gray-500 font-medium mt-1">Manage and track ongoing security alerts.</p>
+  <div class="toolbar">
+  <div class="toolbar-left">
+    <h2>Active Incidents</h2>
+    <p>Manage and track ongoing security alerts</p>
   </div>
 
-  <div class="flex items-center gap-3">
-    <div class="relative">
-      <input type="text" placeholder="Search incidents..." 
-             class="pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none w-64 transition-all">
-      <svg class="w-4 h-4 absolute left-3 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+  <div class="toolbar-right">
+    <div class="search-box">
+      <i class="material-icons search-icon">search</i>
+      <input type="text" [(ngModel)]="searchTerm" 
+         (input)="filterIncidents()" placeholder="Search by host, user, or ID..." />
     </div>
 
-    <button (click)="showCreateModal = true" class="group inline-flex items-center gap-2 px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold shadow-lg shadow-indigo-500/30 transition-all active:scale-95">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg>
-      <span>New Incident</span>
+    <button class="btn-ack">
+      <i class="material-icons" style="font-size: 18px;">bolt</i>
+      Acknowledge
+    </button>
+
+    <button class="btn-new" (click)="showCreateModal = true">
+      <i class="material-icons" style="font-size: 18px;">add</i>
+      New Incident
     </button>
   </div>
 </div>
-<div class="overflow-x-auto relative border rounded-xl overflow-hidden"
+<div class="table-wrapper"
  style="background-color: var(--sys-background);">
-  <table class="w-full text-left border-separate border-spacing-0 text-[11px] whitespace-nowrap" style="background-color: var(--sys-background);">
-    <thead class="border-b">
-      <tr class="text-gray-400 uppercase tracking-wider font-bold">
-        <th class="px-4 py-3 sticky left-0 z-20 first:rounded-tl-2xl shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] bg-slate-500">ID / REF</th>
-        <th class="px-4 py-3">Titre</th>
-        <th class="px-4 py-3">Detection</th>
-        <th class="px-4 py-3">Typo</th>
-        <th class="px-4 py-3">Plant</th>
-        <th class="px-4 py-3">Raised By</th>
-        <th class="px-4 py-3">Description</th>
-        <th class="px-4 py-3">Analyste</th>
-        <th class="px-4 py-3">Status</th>
-        <th class="px-4 py-3">Ack Time</th>
-        <th class="px-4 py-3">ACK</th>
-        <th class="px-4 py-3">Host</th>
-        <th class="px-4 py-3">State</th>
-        <th class="px-4 py-3">Severity</th>
-        <th class="px-4 py-3">First Event</th>
-        <th class="px-4 py-3">Escalation</th>
-        <th class="px-4 py-3">Impact</th>
-        <th class="px-4 py-3">Ticket</th>
-        <th class="px-4 py-3">Investigation </th>
-        <th class="px-4 py-3">Remediation</th>
-        <th class="px-4 py-3">Closed</th>
-        <th class="px-4 py-3">False Pos.</th>
-        <th class="px-4 py-3">Ticket Rel.</th>
-        <th class="px-4 py-3 sticky right-0 z-20 text-center shadow-[-2px_0_5px_-2px_rgba(0,0,0,0.1)]">Actions</th>
-        <th class="px-4 py-3 sticky right-0 z-20 text-center last:rounded-tr-2xl shadow-[-2px_0_5px_-2px_rgba(0,0,0,0.1)] bg-slate-500">Menu</th>
-      </tr>
-    </thead>
+ <div class="scroll-container">
+  <table  class="mat-table" id="incTable" style="background-color: var(--sys-background);">
+   <thead>
+  <tr>
+    <th class="sticky-l"><div class="th-content"><span class="material-icons">badge</span> <span>ID / REF</span></div></th>
+    <th><div class="th-content"><span class="material-icons">title</span> <span>Titre</span></div></th>
+    <th><div class="th-content"><span class="material-icons">search</span> <span>Detection</span></div></th>
+    <th><div class="th-content"><span class="material-icons">category</span> <span>Typo</span></div></th>
+    <th><div class="th-content"><span class="material-icons">factory</span> <span>Plant</span></div></th>
+    <th><div class="th-content"><span class="material-icons">person_outline</span> <span>Raised By</span></div></th>
+    <th><div class="th-content"><span class="material-icons">description</span> <span>Description</span></div></th>
+    <th><div class="th-content"><span class="material-icons">support_agent</span> <span>Analyste</span></div></th>
+    <th><div class="th-content"><span class="material-icons">info</span> <span>Status</span></div></th>
+    <th><div class="th-content"><span class="material-icons">schedule</span> <span>Ack Time</span></div></th>
+    <th><div class="th-content"><span class="material-icons">flash_on</span> <span>ACK</span></div></th>
+    <th><div class="th-content"><span class="material-icons">dns</span> <span>Host</span></div></th>
+    <th><div class="th-content"><span class="material-icons">settings_power</span> <span>State</span></div></th>
+    <th><div class="th-content"><span class="material-icons">warning</span> <span>Severity</span></div></th>
+    <th><div class="th-content"><span class="material-icons">event</span> <span>First Event</span></div></th>
+    <th><div class="th-content"><span class="material-icons">trending_up</span> <span>Escalation</span></div></th>
+    <th><div class="th-content"><span class="material-icons">analytics</span> <span>Impact</span></div></th>
+    <th><div class="th-content"><span class="material-icons">confirmation_number</span> <span>Ticket</span></div></th>
+    <th><div class="th-content"><span class="material-icons">travel_explore</span> <span>Investigation</span></div></th>
+    <th><div class="th-content"><span class="material-icons">build</span> <span>Remediation</span></div></th>
+    <th><div class="th-content"><span class="material-icons">check_circle</span> <span>Closed</span></div></th>
+    <th><div class="th-content"><span class="material-icons">block</span> <span>False Pos.</span></div></th>
+    <th><div class="th-content"><span class="material-icons">link</span> <span>Ticket Rel.</span></div></th>
+    <th class="sticky-r"><div class="th-content"><span class="material-icons">tune</span> <span>Actions</span></div></th>
+    <th class="sticky-r"><div class="th-content"><span class="material-icons">more_vert</span> <span>Menu</span></div></th>
+  </tr>
+</thead>
 
-    <tbody class="divide-y divide-gray-100">
-      <tr *ngFor="let incident of incidents"  class="hover:bg-blue-50/30 transition-colors">
+    <tbody id="tableBody">
+      <tr *ngFor="let incident of filteredIncidents"  class="hover:bg-blue-50/30 transition-colors">
         
-        <td class="px-4 py-3 sticky left-0 z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] bg-slate-900">
-    <div class="font-mono text-gray-400">{{ incident.id_incident }}</div>
-    <div class="font-bold text-indigo-700">{{ incident.incident_id_formatted }}</div>
+        <td class="sticky-l">
+    <div class="id-ref">{{ incident.id_incident }}</div>
+    <div class="id-fmt">{{ incident.incident_id_formatted }}</div>
   </td>
 
-  <td class="px-4 py-3">
-    <input *ngIf="canEdit(incident)" [(ngModel)]="incident.titre" (blur)="updateIncidentField(incident)"
-           class="bg-transparent border-b border-transparent focus:border-indigo-500 focus:outline-none w-full p-1 transition-all">
-    <span *ngIf="!canEdit(incident)">{{ incident.titre }}</span>
-  </td>
+ <td class="title-cell">
+  <input *ngIf="canEdit(incident)" 
+         [(ngModel)]="incident.titre" 
+         (blur)="updateIncidentField(incident)"
+         class="editable-input"
+         placeholder="Enter title...">
 
-  <td class="px-4 py-3 text-gray-500">{{ incident.date_detection | date:'short' }}</td>
+  <span *ngIf="!canEdit(incident)" 
+        class="static-text" 
+        [title]="incident.titre">
+    {{ incident.titre }}
+  </span>
+</td>
 
-  <td class="px-4 py-3">
-    <select *ngIf="canEdit(incident)" [(ngModel)]="incident.insiter_typo" (change)="updateIncidentField(incident)"
-            class="bg-transparent border rounded px-1 focus:ring-1 focus:ring-indigo-500 outline-none">
-      <option value="Mineur">Mineur</option>
-      <option value="Majeur">Majeur</option>
-    </select>
-    <span *ngIf="!canEdit(incident)" [ngClass]="incident.insiter_typo === 'Majeur' ? 'text-red-600' : 'text-blue-600'" class="font-bold">
-      {{ incident.insiter_typo }}
+  <td class="mono">{{ incident.date_detection | date:'short' }}</td>
+
+  <td class="typo-cell">
+  <select *ngIf="canEdit(incident)" 
+          [(ngModel)]="incident.insiter_typo" 
+          (change)="updateIncidentField(incident)"
+          class="typo-select"
+          [ngClass]="incident.insiter_typo === 'Majeur' ? 'typo-majeur' : 'typo-mineur'">
+    <option value="Mineur">Mineur</option>
+    <option value="Majeur">Majeur</option>
+  </select>
+
+  <span *ngIf="!canEdit(incident)" 
+        class="typo-badge"
+        [ngClass]="incident.insiter_typo === 'Majeur' ? 'typo-majeur' : 'typo-mineur'">
+    {{ incident.insiter_typo }}
+  </span>
+</td>
+
+  <td class="plant-cell">
+  <input *ngIf="canEdit(incident)" 
+         [(ngModel)]="incident.plant_name" 
+         (blur)="updateIncidentField(incident)"
+         class="plant-input"
+         placeholder="Plant Name...">
+
+  <div *ngIf="!canEdit(incident)" class="plant-name-text">
+    <i class="material-icons" style="font-size: 14px; opacity: 0.7;">factory</i>
+    <span>{{ incident.plant_name }}</span>
+  </div>
+</td>
+
+ <td class="reporter-cell">
+  <div class="flex items-center gap-2" *ngIf="canEdit(incident)">
+     <i class="material-icons" style="font-size: 16px; color: var(--sys-primary);">edit_note</i>
+     <input [(ngModel)]="incident.raised_by" 
+            (blur)="updateIncidentField(incident)"
+            class="reporter-input"
+            placeholder="Name...">
+  </div>
+
+  <div *ngIf="!canEdit(incident)" class="reporter-badge">
+    <i class="material-icons" style="font-size: 16px; opacity: 0.6;">account_circle</i>
+    <span class="reporter-text">{{ incident.raised_by }}</span>
+  </div>
+</td>
+
+  <td class="investigation-cell">
+  <input *ngIf="canEdit(incident)" 
+         [(ngModel)]="incident.description_investigation" 
+         (blur)="updateIncidentField(incident)"
+         class="investigation-input"
+         placeholder="Describe findings...">
+
+  <span *ngIf="!canEdit(incident)" 
+        class="investigation-text" 
+        [title]="incident.description_investigation">
+    {{ incident.description_investigation || 'No investigation details...' }}
+  </span>
+</td>
+
+<td class="owner-cell">
+  <div class="owner-badge" [title]="'Assigned to: ' + incident.user_name_display">
+    <i class="material-icons owner-avatar">admin_panel_settings</i>
+    
+    <span class="owner-text">
+      {{ incident.user_name_display || 'Unassigned' }}
     </span>
-  </td>
-
-  <td class="px-4 py-3">
-    <input *ngIf="canEdit(incident)" [(ngModel)]="incident.plant_name" (blur)="updateIncidentField(incident)"
-           class="bg-transparent border-b border-transparent focus:border-indigo-500 focus:outline-none w-full p-1">
-    <span *ngIf="!canEdit(incident)">{{ incident.plant_name }}</span>
-  </td>
-
-  <td class="px-4 py-3">
-    <input *ngIf="canEdit(incident)" [(ngModel)]="incident.raised_by" (blur)="updateIncidentField(incident)"
-           class="bg-transparent border-b border-transparent focus:border-indigo-500 focus:outline-none w-full p-1">
-    <span *ngIf="!canEdit(incident)">{{ incident.raised_by }}</span>
-  </td>
-
-  <td class="px-4 py-3">
-    <input *ngIf="canEdit(incident)" [(ngModel)]="incident.description_investigation" (blur)="updateIncidentField(incident)"
-           class="bg-transparent border-b border-transparent focus:border-indigo-500 focus:outline-none w-full p-1 min-w-[150px]">
-    <span *ngIf="!canEdit(incident)" class="truncate block max-w-[150px]">{{ incident.description_investigation }}</span>
-  </td>
-
-  <td class="px-4 py-3 font-bold text-gray-600">{{ incident.user_name_display }}</td>
-
-  <td class="px-4 py-3">
-    <span [ngClass]="getStatusStyles(incident.incident_status)" class="px-2 py-1 rounded-full text-[10px] uppercase font-bold">
-      {{ incident.incident_status }}
-    </span>
-  </td>
+  </div>
+</td>
+  <td class="status-cell">
+  <span [ngClass]="getStatusStyles(incident.incident_status)" class="status-badge">
+    {{ incident.incident_status }}
+  </span>
+</td>
 
   <td class="px-4 py-3 font-mono text-gray-500">{{ incident.acknowledge_time | date:'short' }}</td>
 
@@ -114,43 +165,67 @@
     </button>
   </td>
 
-  <td class="px-4 py-3">
-    <input *ngIf="canEdit(incident)" [(ngModel)]="incident.host_name" (blur)="updateIncidentField(incident)"
-           class="bg-transparent border-b border-transparent focus:border-indigo-500 focus:outline-none w-full p-1 font-semibold">
-    <span *ngIf="!canEdit(incident)" class="font-semibold">{{ incident.host_name }}</span>
-  </td>
+  <td class="host-cell">
+  <input *ngIf="canEdit(incident)" 
+         [(ngModel)]="incident.host_name" 
+         (blur)="updateIncidentField(incident)"
+         class="host-input"
+         placeholder="Hostname...">
 
-  <td class="px-4 py-3">
-    <select *ngIf="canEdit(incident)" [(ngModel)]="incident.host_state" (change)="updateIncidentField(incident)"
-            class="bg-transparent border rounded px-1 outline-none">
-      <option value="Active">Active</option>
-      <option value="Blocked">Blocked</option>
-    </select>
-    <span *ngIf="!canEdit(incident)" [ngClass]="incident.host_state === 'Blocked' ? 'text-red-600' : 'text-green-600'" class="font-bold">
-      {{ incident.host_state }}
-    </span>
-  </td>
+  <div *ngIf="!canEdit(incident)" class="host-badge">
+    <i class="material-icons" style="font-size: 14px; opacity: 0.7; color: var(--sys-primary);">computer</i>
+    <span class="host-text">{{ incident.host_name }}</span>
+  </div>
+</td>
 
-  <td class="px-4 py-3">
-    <select *ngIf="canEdit(incident)" [(ngModel)]="incident.severity_level" (change)="updateIncidentField(incident)"
-            class="bg-transparent border rounded px-1 font-bold outline-none">
-      <option value="Low">Low</option>
-      <option value="Medium">Medium</option>
-      <option value="High">High</option>
-      <option value="Critical">Critical</option>
-    </select>
-    <span *ngIf="!canEdit(incident)" class="font-bold" [ngClass]="incident.severity_level === 'Critical' ? 'text-red-600' : 'text-amber-600'">
-      {{ incident.severity_level }}
-    </span>
-  </td>
+  <td class="state-cell">
+  <select *ngIf="canEdit(incident)" 
+          [(ngModel)]="incident.host_state" 
+          (change)="updateIncidentField(incident)"
+          class="state-select"
+          [ngClass]="incident.host_state === 'Blocked' ? 'state-blocked' : 'state-active'">
+    <option value="Active">Active</option>
+    <option value="Blocked">Blocked</option>
+  </select>
+
+  <div *ngIf="!canEdit(incident)" 
+       class="state-indicator" 
+       [ngClass]="incident.host_state === 'Blocked' ? 'state-blocked' : 'state-active'">
+    <span class="dot"></span>
+    <span>{{ incident.host_state }}</span>
+  </div>
+</td>
+
+  <td class="severity-cell">
+  <select *ngIf="canEdit(incident)" 
+          [(ngModel)]="incident.severity_level" 
+          (change)="updateIncidentField(incident)"
+          class="sev-select"
+          [ngClass]="getSeverityClass(incident.severity_level)">
+    <option value="Low">Low</option>
+    <option value="Medium">Medium</option>
+    <option value="High">High</option>
+    <option value="Critical">Critical</option>
+  </select>
+
+  <span *ngIf="!canEdit(incident)" 
+        class="severity-badge" 
+        [ngClass]="getSeverityClass(incident.severity_level)">
+    {{ incident.severity_level }}
+  </span>
+</td>
         <td class="px-4 py-3 font-mono">{{ incident.first_event | date:'short' }}</td>
-        
-        <td class="px-4 py-3">
-    <select [(ngModel)]="incident.escalation" (change)="updateIncidentField(incident)" [disabled]="!canEdit(incident)"
-            class="border rounded px-1 bg-white focus:ring-1 focus:ring-indigo-500 outline-none">
-      <option>L1</option><option>L2</option><option>L3</option>
-    </select>
-  </td>
+       <td class="esc-cell">
+  <select [(ngModel)]="incident.escalation" 
+          (change)="updateIncidentField(incident)" 
+          [disabled]="!canEdit(incident)"
+          class="esc-select"
+          [ngClass]="getEscalationClass(incident.escalation)">
+    <option value="L1">L1</option>
+    <option value="L2">L2</option>
+    <option value="L3">L3</option>
+  </select>
+</td>
 
         <td class="px-4 py-3 max-w-[100px] truncate">
            <input *ngIf="canEdit(incident)" [(ngModel)]="incident.impact_on_cofi_cob " (blur)="updateIncidentField(incident)"
@@ -162,35 +237,43 @@
            class="bg-transparent border-b border-transparent focus:border-indigo-500 focus:outline-none w-full p-1 text-indigo-600 font-mono">
     <span *ngIf="!canEdit(incident)" class="text-indigo-600 font-mono">{{ incident.help_desk_ticket_nb }}</span>
   </td>
-        <td class="px-4 py-3">
-         <button (click)="openInvestigationModal(incident)" 
-        [disabled]="!canEdit(incident)" 
-        class="px-3 py-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all duration-200 
-               bg-indigo-50 text-indigo-700 border border-indigo-100
-               hover:bg-indigo-600 hover:text-white hover:border-indigo-600 hover:shadow-md 
-               active:scale-95 
-               disabled:opacity-30 disabled:cursor-not-allowed disabled:grayscale"> Investigation
-</button>
-        </td>
+        <td class="action-cell">
+  <button (click)="openInvestigationModal(incident)" 
+          [disabled]="!canEdit(incident)" 
+          class="btn-investigation">
+    <i class="material-icons">search</i>
+    <span>Investigation</span>
+  </button>
+</td>
         <td class="px-4 py-3  max-w-[150px] truncate">{{ incident.remediation_destination }}</td>
         <td class="px-4 py-3 font-mono">{{ incident.time_of_closed_incident | date:'short' }}</td>
         
-        <td class="px-4 py-3">
-           <span [ngClass]="incident.false_position ? 'bg-red-100 text-red-700' : 'bg-gray-100'" class="px-1.5 rounded uppercase font-bold text-[9px]">
-             {{ incident.false_position ? 'False' : 'True' }}
-           </span>
-        </td>
+        <td class="fp-cell">
+  <span [ngClass]="incident.false_position ? 'fp-false' : 'fp-true'" class="fp-badge">
+    <i class="material-icons fp-icon">
+      {{ incident.false_position ? 'report_off' : 'verified' }}
+    </i>
+    
+    {{ incident.false_position ? 'False' : 'True' }}
+  </span>
+</td>
 
-        <td class="px-4 py-3 font-bold" [ngClass]="incident.ticket_relise ? 'text-green-600' : 'text-amber-600'">
-           {{ incident.ticket_relise ? 'Closed' : 'Open' }}
-        </td>
+       <td class="ticket-cell">
+  <span [ngClass]="incident.ticket_relise ? 'ticket-closed' : 'ticket-open'" 
+        class="ticket-pill">
+    <i class="material-icons" style="font-size: 10px; margin-right: 4px;">
+      {{ incident.ticket_relise ? 'check_circle' : 'schedule' }}
+    </i>
+    {{ incident.ticket_relise ? 'Closed' : 'Open' }}
+  </span>
+</td>
 
-        <td class="px-4 py-3 sticky right-0 z-10 shadow-[-2px_0_5px_-2px_rgba(0,0,0,0.1)] text-center">
+        <td class="sticky-r">
           <button (click)="closeIncident(incident.id_incident)" [disabled]="incident.ticket_relise" class="text-green-600 p-1">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
           </button>
         </td>
-      <td [class.z-[100]]="activeMenuId === incident.id_incident" class="px-4 py-3 sticky right-0 z-[30] text-center bg-slate-900 border-l border-slate-800 shadow-[-5px_0_10px_-5px_rgba(0,0,0,0.5)]">
+      <td [class.z-[100]]="activeMenuId === incident.id_incident" class="sticky-r">
 
        <button (click)="toggleMenu($event, incident.id_incident)" 
           class="text-slate-400 hover:text-indigo-400 p-2 rounded-full hover:bg-slate-800 transition-all active:scale-90">
@@ -200,7 +283,7 @@
   </button>
 
   <div *ngIf="activeMenuId === incident.id_incident" 
-       class="absolute right-14 top-2 w-44 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl z-[200] py-2 animate-in fade-in zoom-in duration-150 ring-1 ring-black ring-opacity-5">
+       class="right-14 top-2 w-44 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl z-[200] py-2 animate-in fade-in zoom-in duration-150 ring-1 ring-black ring-opacity-5">
     
     <button (click)="openInvestigationModal(incident)" 
             class="group flex items-center w-full px-4 py-2.5 text-sm text-slate-300 hover:bg-indigo-600 hover:text-white transition">
@@ -212,61 +295,123 @@
       <span class="mr-3">✏️</span> Modifier
     </button>
 
-    <div class="h-px bg-slate-700 my-1"></div> <button (click)="onExportRapport(incident.id_incident)" 
-            class="group flex items-center w-full px-4 py-2.5 text-sm text-emerald-400 hover:bg-emerald-600 hover:text-white transition">
-      <span class="mr-3">📊</span> Export Rapport
-    </button>
+    <div class="h-px bg-slate-800/50 my-2"></div> <a *ngIf="canEdit(incident)" [routerLink]="['/app/rappore', incident.id_incident]" 
+   routerLinkActive="bg-emerald-600 text-white" 
+   class="group flex items-center gap-3 w-full px-4 py-2.5 text-sm font-medium text-slate-400 hover:bg-emerald-600/10 hover:text-emerald-400 rounded-lg transition-all">
+   <i class="material-icons text-lg">assessment</i>
+   <span>Generate Report</span>
+</a>
+<div *ngIf="!canEdit(incident)" class="group flex items-center gap-3 w-full px-4 py-2.5 text-sm font-medium text-slate-600 opacity-50 rounded-lg">
+   <i class="material-icons text-lg">assessment</i>
+   <span>Generate Report</span>
+</div>
   </div>
 </td>
       </tr>
     </tbody>
   </table>
 </div>
-<div *ngIf="showCreateModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+<div class="workflow-container">
   
-  <div class=" rounded-2xl w-full max-w-lg shadow-2xl bg-white animate-in fade-in zoom-in duration-200">
-    <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-      <h3 class="text-lg font-bold text-gray-900">New Incident</h3>
-      <button (click)="showCreateModal = false" class="text-gray-400 hover:text-gray-600">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+  <div class="step-card">
+    <div class="step-num">1</div>
+    <div class="step-text">
+      <span class="step-title">Acknowledge</span>
+      <span class="step-desc">Accept the ticket</span>
+    </div>
+  </div>
+
+  <span class="arrow">→</span>
+
+  <div class="step-card">
+    <div class="step-num">2</div>
+    <div class="step-text">
+      <span class="step-title">Investigate</span>
+      <span class="step-desc">Log analysis & findings</span>
+    </div>
+  </div>
+
+  <span class="arrow">→</span>
+
+  <div class="step-card">
+    <div class="step-num">3</div>
+    <div class="step-title">Remediate</div>
+    <div class="step-desc">Apply fixes & isolation</div>
+  </div>
+
+  <span class="arrow">→</span>
+
+  <div class="step-card">
+    <div class="step-num">4</div>
+    <div class="step-title">Close</div>
+    <div class="step-desc">Document & finalize</div>
+  </div>
+</div>
+<div *ngIf="showCreateModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md bg-black/60">
+  
+  <div class="modal-content-glass rounded-2xl w-full max-w-lg shadow-2xl animate-in fade-in zoom-in duration-300 overflow-hidden border border-white/10">
+    
+    <div class="px-6 py-5 border-b border-white/10 flex justify-between items-center bg-white/5">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-indigo-500/20 rounded-lg">
+          <i class="material-icons text-indigo-400">add_alert</i>
+        </div>
+        <h3 class="text-xl font-bold text-white tracking-tight">Create New Incident</h3>
+      </div>
+      <button (click)="showCreateModal = false" class="p-2 rounded-full hover:bg-white/10 text-gray-400 transition-colors">
+        <i class="material-icons">close</i>
       </button>
     </div>
 
-    <div class="p-6 space-y-4">
-      <div>
-        <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Titre</label>
-        <input [(ngModel)]="newIncident.titre" type="text" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500">
+    <div class="p-8 space-y-5 bg-[#0f172a]">
+      <div class="form-group">
+        <label class="modal-label">Incident Title</label>
+        <div class="relative">
+          <i class="material-icons absolute left-3 top-2.5 text-gray-500 text-sm">title</i>
+          <input [(ngModel)]="newIncident.titre" type="text" placeholder="e.g. Unauthorized Access Detected" class="modal-input pl-10">
+        </div>
       </div>
       
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Typo</label>
-          <select [(ngModel)]="newIncident.insiter_typo" class="w-full px-3 py-2 border rounded-lg text-sm">
+      <div class="grid grid-cols-2 gap-6">
+        <div class="form-group">
+          <label class="modal-label">Severity (Typo)</label>
+          <select [(ngModel)]="newIncident.insiter_typo" class="modal-input appearance-none">
             <option value="Mineur">Mineur</option>
             <option value="Majeur">Majeur</option>
           </select>
         </div>
-        <div>
-          <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Plant</label>
-          <input [(ngModel)]="newIncident.plant_name" type="text" class="w-full px-3 py-2 border rounded-lg text-sm">
+        <div class="form-group">
+          <label class="modal-label">Plant / Site</label>
+          <div class="relative">
+            <i class="material-icons absolute left-3 top-2.5 text-gray-500 text-sm">factory</i>
+            <input [(ngModel)]="newIncident.plant_name" type="text" placeholder="Location..." class="modal-input pl-10">
+          </div>
         </div>
       </div>
-      <div>
-        <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Description</label>
-        <textarea [(ngModel)]="newIncident.description_investigation" rows="3" class="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
+
+      <div class="form-group">
+        <label class="modal-label">Initial Findings (Investigation)</label>
+        <textarea [(ngModel)]="newIncident.description_investigation" rows="3" placeholder="Provide technical details..." class="modal-input resize-none"></textarea>
       </div>
-      <div>
-        <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">raised_by</label>
-        <textarea [(ngModel)]="newIncident.raised_by" rows="3" class="w-full px-3 py-2 border rounded-lg text-sm"></textarea>
+
+      <div class="form-group">
+        <label class="modal-label">Raised By</label>
+        <div class="relative">
+          <i class="material-icons absolute left-3 top-3 text-gray-500 text-sm">person</i>
+          <input [(ngModel)]="newIncident.raised_by" type="text" placeholder="Reporter name..." class="modal-input pl-10">
+        </div>
       </div>
     </div>
 
-    <div class="px-6 py-4 bg-gray-50 rounded-b-2xl flex justify-end gap-3">
-      <button (click)="showCreateModal = false" class="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-gray-800">Cancel</button>
+    <div class="px-6 py-5 bg-white/5 border-t border-white/10 flex justify-end items-center gap-4">
+      <button (click)="showCreateModal = false" class="px-5 py-2 text-sm font-semibold text-gray-400 hover:text-white transition-colors">
+        Cancel
+      </button>
       <button (click)="createIncident()" 
               [disabled]="isLoading"
-              class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold shadow-lg shadow-indigo-200">
-        {{ isLoading ? 'Creating...' : 'Create Incident' }}
+              class="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-bold shadow-lg shadow-indigo-500/20 active:scale-95 transition-all disabled:opacity-50">
+        <i class="material-icons text-sm" *ngIf="!isLoading">send</i>
+        {{ isLoading ? 'Processing...' : 'Deploy Incident' }}
       </button>
     </div>
   </div>
@@ -312,67 +457,113 @@
     </div>
   </div>
 </div>
-<div *ngIf="showInvestigationModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm">
-  <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl animate-in fade-in zoom-in duration-200">
-    <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-      <h3 class="text-lg font-bold text-gray-900">Investigation Details</h3>
-      <button (click)="showInvestigationModal = false" class="text-gray-400 hover:text-gray-600">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+<div *ngIf="showInvestigationModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
+  
+  <div class="modal-content-dark rounded-2xl w-full max-w-2xl shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden border border-white/10">
+    
+    <!-- Header -->
+    <div class="px-6 py-5 border-b border-white/10 flex justify-between items-center bg-white/5">
+      <div class="flex items-center gap-3">
+        <div class="p-2.5 bg-sky-500/10 rounded-xl border border-sky-500/20">
+          <i class="material-icons text-sky-400">visibility</i> 
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-white tracking-tight">Incident Investigation: Overview</h3>
+          <p class="text-xs text-gray-400 mt-1">Consulting incident artifact properties</p>
+        </div>
+      </div>
+      <button (click)="showInvestigationModal = false" class="p-2 rounded-full hover:bg-white/10 text-gray-500 hover:text-white transition-colors">
+        <i class="material-icons">close</i>
       </button>
     </div>
 
-    <div class="p-6 space-y-4 grid grid-cols-2 gap-4">
-      <div>
-        <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Host Name</label>
-        <input [(ngModel)]="selectedIncident.host_name" type="text" class="w-full px-3 py-2 border rounded-lg text-sm">
+    <!-- Content (Read Only) -->
+    <div class="p-8 space-y-8 bg-[#0f172a]">
+      
+      <!-- Row 1 -->
+      <div class="grid grid-cols-2 gap-8">
+        <div class="detail-group">
+          <label class="text-[10px] uppercase tracking-wider text-sky-400 font-bold">Host Name</label>
+          <div class="flex items-center gap-3 mt-2 text-white">
+            <i class="material-icons text-gray-500 text-base">computer</i>
+            <span class="font-medium">{{ selectedIncident.host_name || 'N/A' }}</span>
+          </div>
+        </div>
+        <div class="detail-group">
+          <label class="text-[10px] uppercase tracking-wider text-sky-400 font-bold">Host State</label>
+          <div class="mt-2">
+            <span [class]="selectedIncident.host_state === 'Active' ? 'text-green-400 bg-green-400/10' : 'text-red-400 bg-red-400/10'" 
+                  class="px-3 py-1 rounded-full text-xs font-bold border border-current">
+              {{ selectedIncident.host_state | uppercase }}
+            </span>
+          </div>
+        </div>
       </div>
-      <div>
-        <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Host State</label>
-        <select [(ngModel)]="selectedIncident.host_state" class="w-full px-3 py-2 border rounded-lg text-sm">
-          <option value="Active">Active</option>
-          <option value="Blocked">Blocked</option>
-        </select>
+
+      <!-- Row 2 -->
+      <div class="grid grid-cols-2 gap-8">
+        <div class="detail-group">
+          <label class="text-[10px] uppercase tracking-wider text-sky-400 font-bold">Severity Level</label>
+          <div class="mt-2 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full" 
+                  [ngClass]="{'bg-red-500 shadow-[0_0_8px_red]': selectedIncident.severity_level === 'Critical', 'bg-orange-500': selectedIncident.severity_level === 'High', 'bg-yellow-500': selectedIncident.severity_level === 'Medium', 'bg-blue-500': selectedIncident.severity_level === 'Low'}"></span>
+            <span class="text-white font-medium">{{ selectedIncident.severity_level }}</span>
+          </div>
+        </div>
+        <div class="detail-group">
+          <label class="text-[10px] uppercase tracking-wider text-sky-400 font-bold">Date First Event</label>
+          <div class="flex items-center gap-3 mt-2 text-white">
+            <i class="material-icons text-gray-500 text-base">event</i>
+            <span class="font-medium">{{ selectedIncident.first_event | date:'medium' }}</span>
+          </div>
+        </div>
       </div>
-      <div class="col-span-2">
-        <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Severity Level</label>
-        <select [(ngModel)]="selectedIncident.severity_level" class="w-full px-3 py-2 border rounded-lg text-sm">
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-          <option value="Critical">Critical</option>
-        </select>
+
+      <div class="border-t border-white/5"></div>
+
+      <!-- Row 3 -->
+      <div class="grid grid-cols-2 gap-8">
+        <div class="detail-group">
+          <label class="text-[10px] uppercase tracking-wider text-sky-400 font-bold">Escalation Tier</label>
+          <div class="mt-2 text-white">
+            <span class="px-2 py-1 bg-white/5 rounded border border-white/10 text-xs font-mono">
+              LEVEL_{{ selectedIncident.escalation }}
+            </span>
+          </div>
+        </div>
+        <div class="detail-group">
+          <label class="text-[10px] uppercase tracking-wider text-sky-400 font-bold">Impact Assessment</label>
+          <p class="mt-2 text-gray-300 text-sm leading-relaxed italic">
+            "{{ selectedIncident.impact_on_cofi_cob || 'No impact described' }}"
+          </p>
+        </div>
       </div>
-           <div>
-  <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Date First Event</label>
-  <input [(ngModel)]="selectedIncident.first_event" 
-         type="datetime" 
-         class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500">
-</div>
-      <div class="col-span-2">
-        <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Escalation</label>
-        <select [(ngModel)]="selectedIncident.escalation" class="w-full px-3 py-2 border rounded-lg text-sm">
-          <option value="L1">L1</option>
-          <option value="L2">L2</option>
-          <option value="L3">L3</option>
-        </select>
-      </div>
-      <div class="col-span-2">
-        <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Impact</label>
-        <input [(ngModel)]="selectedIncident.impact_on_cofi_cob" type="text" class="w-full px-3 py-2 border rounded-lg text-sm">
-      </div>
-      <div class="col-span-2">
-        <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Ticket NB</label>
-        <input [(ngModel)]="selectedIncident.help_desk_ticket_nb" type="text" class="w-full px-3 py-2 border rounded-lg text-sm">
-      </div>
-      <div class="col-span-2">
-        <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Remediation</label>
-        <input [(ngModel)]="selectedIncident.remediation_destination" type="text" class="w-full px-3 py-2 border rounded-lg text-sm">
+
+      <!-- Row 4 -->
+      <div class="grid grid-cols-2 gap-8">
+        <div class="detail-group">
+          <label class="text-[10px] uppercase tracking-wider text-sky-400 font-bold">Help Desk Ticket</label>
+          <div class="flex items-center gap-3 mt-2 text-indigo-400 font-mono">
+            <i class="material-icons text-gray-500 text-base">confirmation_number</i>
+            <span>#{{ selectedIncident.help_desk_ticket_nb || 'NO-TICKET' }}</span>
+          </div>
+        </div>
+        <div class="detail-group">
+          <label class="text-[10px] uppercase tracking-wider text-sky-400 font-bold">Remediation Action</label>
+          <div class="flex items-center gap-3 mt-2 text-white">
+            <i class="material-icons text-gray-500 text-base">build_circle</i>
+            <span class="text-sm">{{ selectedIncident.remediation_destination || 'None' }}</span>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="px-6 py-4 rounded-b-2xl flex justify-end gap-3">
-      <button (click)="showInvestigationModal = false" class="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-gray-800">Cancel</button>
-      <button (click)="saveInvestigation()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold">Save Investigation</button>
+    <!-- Footer -->
+    <div class="px-6 py-5 bg-white/5 border-t border-white/10 flex justify-end">
+      <button (click)="showInvestigationModal = false" 
+              class="px-8 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-sm font-bold transition-all active:scale-95">
+        Close Details
+      </button>
     </div>
   </div>
 </div>

@@ -26,15 +26,12 @@ export class WidgetComponent implements OnInit, OnDestroy{
   private observer: MutationObserver | undefined;
 
   ngOnInit() {
-    // 1. Thabbet awwel ma yet-7al l-widget
     this.updateStyle();
 
-    // 2. Rakkeb el "Watcher" (MutationObserver)
     this.observer = new MutationObserver(() => {
       this.updateStyle();
     });
 
-    // 3. 9ollou 3ess 3al tag 'html' khassatan el 'class'
     this.observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['class']
@@ -46,7 +43,6 @@ export class WidgetComponent implements OnInit, OnDestroy{
   }
 
   ngOnDestroy() {
-    // mohemma bch l-app ma t-wallich t-thaqel (Memory leak)
     this.observer?.disconnect();
   }
 }

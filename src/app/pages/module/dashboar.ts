@@ -9,4 +9,6 @@ export interface DashboardItem {
     columns?: number;
     backgroundColor?: string;
     color?: string;
+    moin?:number[];
+    year?:number[];
 }

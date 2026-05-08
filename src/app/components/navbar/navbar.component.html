@@ -1,4 +1,4 @@
-<nav class="h-16 border-b border-slate-200 px-6 flex justify-between items-center sticky top-0 z-50">
+<nav class="h-16 px-6 flex justify-between items-center sticky top-0 z-50">
   
   <div class="flex items-center gap-8">
     <div class="flex flex-col">
@@ -11,24 +11,107 @@
       </div>
     </div>
 
-    <div class="hidden lg:flex items-center bg-slate-100 rounded-lg px-3 py-1.5 border border-transparent focus-within:border-[#4f46e5] transition-all">
-      <i class="fas fa-search text-slate-400 text-sm"></i>
-      <input type="text" placeholder="Search incidents..." class="bg-transparent border-none outline-none text-sm ml-2 w-64 text-slate-700 placeholder:text-slate-400">
-    </div>
+    <div class="search-bar hidden lg:flex items-center rounded-lg px-3 py-1.5 border transition-all">
+  <i class="fas fa-search search-icon text-sm"></i>
+  <input type="text" 
+         placeholder="Search incidents..." 
+         class="bg-transparent border-none outline-none text-sm ml-2 w-64 search-input">
+</div>
+
   </div>
 
   <div class="flex items-center gap-4 relative">
-    
-    <div class="flex items-center gap-2 pr-4 border-r border-slate-200">
-      <button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full relative">
-        <i class="far fa-bell text-lg"></i>
-        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-      </button>
-      <button class="p-2 text-slate-500 hover:bg-slate-50 rounded-full">
-        <i class="fas fa-cog text-lg"></i>
-      </button>
+    <div class="flex items-center gap-2 pr-4">
+
+  <div class="relative">
+  <button class="p-2 action-btn rounded-full relative" (click)="isMessengerOpen = !isMessengerOpen; new = false">
+  <i class="fas fa-comments"></i>
+  
+  <span *ngIf="totalUnreadCount > 0" 
+        class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white">
+    {{ totalUnreadCount }}
+  </span>
+</button>
+
+  <div *ngIf="isMessengerOpen" class="messenger-dropdown animate-in fade-in zoom-in duration-200">
+    <div class="dropdown-header flex justify-between items-center px-4 py-2 border-b">
+        <h2 class="text-xl font-bold">Discussions</h2>
+        <button (click)="isMessengerOpen = false" class="hover:bg-slate-100 p-1 rounded-full transition">
+            <i class="fas fa-times text-slate-400"></i>
+        </button>
     </div>
 
+    <div class="search-wrap p-2">
+        <div class="relative items-center flex">
+            <i class="fas fa-search absolute left-3 text-slate-400 text-xs"></i>
+            <input [(ngModel)]="searchQuery" placeholder="Rechercher un analyste..." class="search-input-field w-full pl-8 pr-3 py-1.5 bg-slate-50 rounded-lg text-sm border-none outline-none focus:ring-1 focus:ring-indigo-500"/>
+        </div>
+    </div>
+
+    <div class="conversation-list custom-scroll max-h-[350px] overflow-y-auto">
+        <div *ngFor="let user of users | usersFilter1: searchQuery"
+             class="user-item flex items-center p-3 hover:bg-slate-50 cursor-pointer border-l-4 border-transparent"
+             [class.active-user]="selectedUser?.id === user.id"
+             (click)="selectUser(user)">
+            
+            <div class="relative">
+                <div class="avatar w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" [style.background-color]="'hsl(' + getHue(user.id) + ', 70%, 50%)'">
+                    {{ user.username[0] | uppercase }}
+                </div>
+                <span class="status-dot absolute bottom-0 right-0 w-3 h-3 border-2 border-white rounded-full" 
+                      [class.bg-green-500]="isOnline(user.id)" 
+                      [class.bg-slate-300]="!isOnline(user.id)"></span>
+            </div>
+
+            <div class="ml-3 flex-1">
+                <div class="flex justify-between items-center">
+                    <span class="text-sm font-semibold text-slate-800">{{ user.username }}</span>
+                    <span class="text-[10px] text-slate-400">{{ getUnreadCount(user.id) > 0 ? 'Nouveau' : '' }}</span>
+                </div>
+                <p class="text-xs text-slate-500 truncate w-40">{{ getLastMsg(user.id) || 'Aucun message' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="mini-chat-window" *ngIf="selectedUser">
+    <div class="chat-header-modern">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-sm" [style.background-color]="'hsl(' + getHue(selectedUser.id) + ', 70%, 45%)'">
+                {{ selectedUser.username[0] | uppercase }}
+            </div>
+            <div>
+                <p class="text-sm font-bold m-0 leading-tight">{{ selectedUser.username }}</p>
+                <p class="text-[10px] text-green-500 m-0">En ligne</p>
+            </div>
+        </div>
+        <div class="flex gap-1">
+            <button class="header-btn" (click)="selectedUser = null">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="chat-messages-area custom-scroll" #scrollArea>
+        <ng-container *ngFor="let m of messages">
+            <div class="msg-box" [class.sent]="m.sender_id === currentUserId">
+                <div class="msg-bubble shadow-sm">
+                    {{ m.message }}
+                </div>
+                <span class="msg-timestamp">{{ m.sent_date | date:'HH:mm' }}</span>
+            </div>
+        </ng-container>
+    </div>
+
+    <div class="chat-footer-modern">
+        <input [(ngModel)]="newMessage" (keyup.enter)="send()" placeholder="Type a message..." class="mini-input" />
+        <button (click)="send()" [disabled]="!newMessage.trim()" class="mini-send-btn">
+            <i class="fas fa-paper-plane"></i>
+        </button>
+    </div>
+</div>
+    
     <div (click)="toggleMenu()" class="flex items-center gap-3 pl-2 cursor-pointer hover:bg-slate-50 p-1.5 rounded-lg transition select-none">
       <div class="flex flex-col text-right hidden sm:flex">
         <span class="text-xs font-bold text-slate-800">{{ userProfile?.username || 'Analyst' }}</span>
@@ -89,5 +172,6 @@
       </div>
     </div>
 
+  </div>
   </div>
 </nav>

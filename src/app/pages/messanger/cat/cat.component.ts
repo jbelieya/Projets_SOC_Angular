@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { Subscription } from 'rxjs';
 
-/* ── Pipe pour filter el users par nom ── */
 @Pipe({ name: 'usersFilter', standalone: true })
 export class UsersFilterPipe implements PipeTransform {
   transform(users: any[], query: string): any[] {
@@ -74,7 +73,7 @@ private unreadMap: Map<number, number> = new Map();
 const isDuplicate = this.messages.some(m => 
         m.message === msg.message && 
         m.sender_id === senderId && 
-        Math.abs(new Date(m.sent_date).getTime() - new Date(msg.sent_date).getTime()) < 1000 // فرق أقل من ثانية
+        Math.abs(new Date(m.sent_date).getTime() - new Date(msg.sent_date).getTime()) < 1000 
       );          
           if (!isDuplicate) {
             this.messages.push({

@@ -1,1 +1,57 @@
-<p>user works!</p>
+<div class="profile-page">
+
+  <div class="cover">
+    <span class="cover-badge">{{ userProfile?.role | uppercase }}</span>
+  </div>
+
+  <div class="profile-card" *ngIf="userProfile">
+    <div class="avatar-row">
+      <div class="avatar"
+        [style.background-color]="'hsl(' + getHue(currentUserId) + ', 70%, 40%)'">
+        {{ userProfile?.username?.charAt(0)?.toUpperCase() }}
+      </div>
+      <div class="name-block">
+        <h2>{{ userProfile?.username }}</h2>
+        <p class="handle">{{ userProfile?.email }}</p>
+      </div>
+    </div>
+
+    <div class="meta">
+      <span class="badge role">{{ userProfile?.role | uppercase }}</span>
+      <span class="badge online">● EN LIGNE</span>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <p class="label">Nom d'utilisateur</p>
+        <p class="val">{{ userProfile?.username }}</p>
+      </div>
+      <div class="info-item">
+        <p class="label">Email professionnel</p>
+        <p class="val">{{ userProfile?.email }}</p>
+      </div>
+      <div class="info-item">
+        <p class="label">Identifiant (ID)</p>
+        <p class="val">#{{ currentUserId }}</p>
+      </div>
+      <div class="info-item">
+        <p class="label">Statut du compte</p>
+        <p class="val" style="color:#00c853;">Actif</p>
+      </div>
+    </div>
+
+    <!-- Section simplifiée sans les compteurs globaux -->
+    <p class="section-title">Informations de session</p>
+    <div class="activity">
+      <div class="act-row success">
+        <span class="dot"></span>
+        <span class="act-text">Connecté en tant que {{ userProfile?.role }}</span>
+      </div>
+      <div class="act-row">
+        <span class="dot"></span>
+        <span class="act-text">Dernière synchronisation du profil effectuée</span>
+      </div>
+    </div>
+
+  </div>
+</div>

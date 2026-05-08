@@ -24,7 +24,7 @@
   --amber:  #f5a623;
   --text:   #e8eaf0;
   --text2:  #8b90a4;
-  --text3:  #555a6e;
+  --text3:  #aaabb2;
   --recv:   #1e2235;
 }
 
@@ -466,7 +466,7 @@
 }
 
 .unread-text {
-  color: var(--text-bright, #131010) !important;
+  color: var(--text-bright, #b9b4b4) !important;
   font-weight: 600;
 }
 

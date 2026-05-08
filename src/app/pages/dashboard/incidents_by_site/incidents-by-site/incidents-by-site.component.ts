@@ -1,8 +1,9 @@
-import { Component, ElementRef, inject, viewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, viewChild, OnInit, input, effect } from '@angular/core';
 import { KpisService } from '../../../../services/KPIs/kpis.service';
 import { Chart } from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { CommonModule } from '@angular/common';
+import { DashboardItem } from '../../../module/dashboar';
 
 @Component({
   selector: 'app-incidents-by-site',
@@ -11,14 +12,16 @@ import { CommonModule } from '@angular/common';
   templateUrl: './incidents-by-site.component.html',
   styleUrl: './incidents-by-site.component.css'
 })
-export class IncidentsBySiteComponent implements OnInit {
+export class IncidentsBySiteComponent {
   store = inject(KpisService);
   chartRef = viewChild.required<ElementRef>('chart');
   myChart: any;
   currentType: 'month' | 'year' = 'month';
-
-  ngOnInit() {
-    this.updateStats();
+data = input.required<DashboardItem>();
+  constructor() {
+    effect(() => {
+      this.updateStats();
+    });
   }
 
   toggleType(type: 'month' | 'year') {
@@ -27,14 +30,24 @@ export class IncidentsBySiteComponent implements OnInit {
   }
 
   updateStats() {
-    // Ne5tarou el chhar el 7ali wala el 3am el 7ali k-default
-    const currentVal = this.currentType === 'month' ? [new Date().getMonth() + 1] : [new Date().getFullYear()];
+let values: number[] = [];
+    
+const currentData = this.data();
+if (!currentData) return;
 
-    this.store.getKpiDatapro('incidents_by_site', this.currentType, currentVal).subscribe({
+if (this.currentType === 'month') {
+  values = (currentData.moin && currentData.moin.length > 0) 
+           ? currentData.moin 
+           : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; // Default: kol el chhour
+} else {
+  values = (currentData.year && currentData.year.length > 0) 
+           ? currentData.year 
+           : [2024, 2025, 2026]; 
+}
+
+    this.store.getKpiDatapro('incidents_by_site', this.currentType, values).subscribe({
       next: (data) => {
-        // Madem el data jaya { "3": [{plant_name: 'X', count: 5}] }
-        // Ne5thou el lista mta3 el chhar/3am elli 3ayetlou
-        const statsArray = data[currentVal[0]] || [];
+        const statsArray = data[values[0]] || [];
         
         const labels = statsArray.map((item: any) => item.plant_name);
         const counts = statsArray.map((item: any) => item.count);

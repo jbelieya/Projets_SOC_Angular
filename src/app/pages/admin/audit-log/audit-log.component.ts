@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 @Component({
   selector: 'app-audit-log',
-  imports: [CommonModule,MatTableModule,      // <--- HEDHI EL NA9SA
+  imports: [CommonModule,MatTableModule,     
     MatPaginatorModule,
     MatSortModule,
     MatInputModule,

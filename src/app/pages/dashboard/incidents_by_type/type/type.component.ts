@@ -1,24 +1,27 @@
-import { Component, ElementRef, inject, viewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, viewChild, OnInit, input, effect } from '@angular/core';
 import { KpisService } from '../../../../services/KPIs/kpis.service';
 import { Chart } from 'chart.js/auto';
 import { CommonModule } from '@angular/common';
+import { DashboardItem } from '../../../module/dashboar';
 @Component({
   selector: 'app-type',
   imports: [CommonModule],
   templateUrl: './type.component.html',
   styleUrl: './type.component.css'
 })
-export class TypeComponent implements OnInit {
+export class TypeComponent  {
   store = inject(KpisService);
   chartRef = viewChild.required<ElementRef>('chart');
   myChart: any;
   currentType: 'month' | 'year' = 'month';
-  
+  data = input.required<DashboardItem>();
   // Variable bch n-7ottu fiha el Total summation
   totalIncidents: number = 0;
 
-  ngOnInit() {
-    this.updateStats();
+   constructor() {
+    effect(() => {
+      this.updateStats();
+    });
   }
 
   toggleType(type: 'month' | 'year') {
@@ -27,8 +30,20 @@ export class TypeComponent implements OnInit {
   }
 
   updateStats() {
-    const values = this.currentType === 'month' ? [1, 2, 3, 4, 5, 6] : [2024, 2025, 2026];
+let values: number[] = [];
     
+const currentData = this.data();
+if (!currentData) return;
+
+if (this.currentType === 'month') {
+  values = (currentData.moin && currentData.moin.length > 0) 
+           ? currentData.moin 
+           : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; // Default: kol el chhour
+} else {
+  values = (currentData.year && currentData.year.length > 0) 
+           ? currentData.year 
+           : [2024, 2025, 2026]; 
+}   
     this.store.getKpiDatapro('incidents_by_type', this.currentType, values).subscribe({
       next: (data: any) => {
         console.log("Raw Data from API:", data);

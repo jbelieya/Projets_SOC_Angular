@@ -1,8 +1,9 @@
-import { Component, ElementRef, inject, viewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, viewChild, OnInit, input, effect } from '@angular/core';
 import { KpisService } from '../../../../services/KPIs/kpis.service';
 import { Chart } from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { CommonModule } from '@angular/common';
+import { DashboardItem } from '../../../module/dashboar';
 
 @Component({
   selector: 'app-analyst',
@@ -11,13 +12,17 @@ import { CommonModule } from '@angular/common';
   templateUrl: './analyst.component.html',
   styleUrl: './analyst.component.css'
 })
-export class AnalystComponent implements OnInit {
+export class AnalystComponent  {
   store = inject(KpisService);
   chartRef = viewChild.required<ElementRef>('chart');
   myChart: any;
   currentType: 'month' | 'year' = 'month';
-
-  ngOnInit() { this.updateStats(); }
+data = input.required<DashboardItem>();
+  constructor() {
+    effect(() => {
+      this.updateStats();
+    });
+  }
 
   toggleType(type: 'month' | 'year') {
     this.currentType = type;
@@ -25,8 +30,21 @@ export class AnalystComponent implements OnInit {
   }
 
   updateStats() {
-    const values = this.currentType === 'month' ? [1, 2, 3, 4, 5, 6] : [2024, 2025, 2026];
-    this.store.getKpiDatapro('incidents_by_analyst', this.currentType, values).subscribe({
+let values: number[] = [];
+    
+const currentData = this.data();
+if (!currentData) return;
+
+if (this.currentType === 'month') {
+  values = (currentData.moin && currentData.moin.length > 0) 
+           ? currentData.moin 
+           : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; // Default: kol el chhour
+} else {
+  values = (currentData.year && currentData.year.length > 0) 
+           ? currentData.year 
+           : [2024, 2025, 2026]; 
+}
+   this.store.getKpiDatapro('incidents_by_analyst', this.currentType, values).subscribe({
       next: (data: any) => {
         const totalsMap = new Map<string, number>();
         Object.values(data).forEach((periodData: any) => {

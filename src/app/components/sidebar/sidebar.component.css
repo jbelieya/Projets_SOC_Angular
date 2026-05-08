@@ -1,0 +1,159 @@
+.sidebar {
+  width: 260px;
+  height: 100vh; 
+  display: flex;
+  flex-direction: column;
+  background-color: var(--sys-surface); 
+  border-right: none !important; 
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1); 
+}
+
+.profile-section {
+  padding: 40px 20px;
+  text-align: center;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.02), transparent);
+}
+
+.big-logo {
+  width: 90px;
+  height: 90px;
+  border-radius: 24px; 
+  margin: 0 auto 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: 800;
+  color: rgb(250, 249, 249);
+  border: 4px solid var(--sys-background); 
+  box-shadow: var(--mat-sys-level2-shadow);
+}
+
+.user-info h3 { 
+  margin: 0; 
+  font-size: 1.2rem; 
+  color: #fff; 
+  font-weight: 600;
+}
+
+.user-info .email { 
+  color: var(--sys-on-surface-variant); 
+  font-size: 0.8rem; 
+  margin: 5px 0 15px; 
+}
+
+.role-badge {
+  background: var(--sys-primary-container);
+  color: var(--sys-on-primary-container);
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.nav-menu { 
+  flex: 1; 
+  padding: 20px 15px; 
+  display: flex;
+  flex-direction: column;
+  gap: 8px; 
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 14px 18px;
+  text-decoration: none;
+  color: var(--sys-on-surface-variant);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-item:hover, .nav-item.active {
+  background-color: var(--sys-surface-container-low);
+  color: #777575;
+}
+
+.nav-item.active {
+  background-color: rgba(79, 70, 229, 0.1); 
+  color: var(--sys-primary);
+}
+
+.nav-item i { 
+  margin-right: 15px; 
+  font-size: 1.1rem;
+}
+
+.bottom-links {
+  margin-top: auto; 
+  padding-top: 20px;
+}
+
+.logout {
+  color: var(--sys-error) !important;
+}
+
+.logout:hover {
+  background-color: rgba(239, 68, 68, 0.1) !important;
+}
+
+.separator { display: none; }
+.nav-item i {
+  margin-right: 15px; 
+  width: 20px; 
+  text-align: center;
+  font-size: 1.1rem;
+  color: white; 
+  
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+
+.nav-item i.fa-user-circle {
+  background: linear-gradient(135deg, var(--icon-grad-profile-start), var(--icon-grad-profile-end));
+  background-clip: text;
+  -webkit-background-clip: text; 
+  color: transparent !important; 
+}
+
+.nav-item i.fa-comments {
+  background: linear-gradient(135deg, var(--icon-grad-messanger-start), var(--icon-grad-messanger-end));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent !important;
+}
+
+/* الـ Gradient للـ Incidents SOC */
+.nav-item i.fa-shield-alt {
+  background: linear-gradient(135deg, var(--icon-grad-incidents-start), var(--icon-grad-incidents-end));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent !important;
+}
+
+/* الـ Gradient للـ Logout */
+.nav-item i.fa-sign-out-alt {
+  background: linear-gradient(135deg, var(--icon-grad-logout-start), var(--icon-grad-logout-end));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent !important;
+}
+
+/* 3. ستايل الـ Hover (يضوي الأيقونة شوية) */
+.nav-item:hover i {
+  transform: translateY(-1px);
+  /* نزيدو الـ opacity شوية للأيقونة */
+  opacity: 1;
+}
+
+/* 4. الستايل للـ Active Item */
+.nav-item.active i {
+  color: transparent !important; /* ديما شفاف باش يبان الـ gradient */
+}
+
+.nav-item.active span {
+  color: white;
+  font-weight: 600;
+}

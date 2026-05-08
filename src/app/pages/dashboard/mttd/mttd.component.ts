@@ -1,47 +1,64 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, effect, signal } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { KpisService } from '../../../services/KPIs/kpis.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { DashboardItem } from '../../module/dashboar';
 
 @Component({
   selector: 'app-mttd',
+  standalone: true,
   imports: [MatIcon],
   templateUrl: './mttd.component.html',
   styleUrl: './mttd.component.css'
 })
-export class MTTDComponent implements OnInit {
-store = inject(KpisService);
-     mttd:string='0';
-     constructor(private router: Router){}
-    ngOnInit(): void {
-        this.store.getKpiData('mttd',2026,3).subscribe(
-          {
-            next:(data) => {
-                this.mttd='';
-                console.log(data.mttd);
-                this.mttd=data.mttd;
-            },
-            error:(err) =>{
-               if (err.status === 401 || err.status === 403) {
-                       Swal.fire({
-                         title: 'Access Denied',
-                         text: 'You are not authorized to access dashborde.',
-                         icon: 'warning',
-                         confirmButtonText: 'Go to Login',
-                         confirmButtonColor: '#4f46e5' // Indigo color
-                       }).then((result) => {
-                         if (result.isConfirmed) {
-                           this.router.navigate(['/login']); // Redirect l-page l-login
-                         }
-                       });
-                     } else {
-                       // Error o5ra (server down, etc.)
-                       Swal.fire('Error', 'An error occurred while dashboard the incident.', 'error');
-                     }
-                   }
-                 });
-            }
-          }
+export class MTTDComponent {
+  store = inject(KpisService);
+  router = inject(Router);
 
+  mttd = signal<number>(0);
+  data = input.required<DashboardItem>();
+  currentType: 'month' | 'year' = 'month';
 
+  constructor() {
+    effect(() => {
+      this.updateStats();
+    });
+  }
+
+  updateStats() {
+    let values: number[] = [];
+    
+    const currentData = this.data();
+if (!currentData) return;
+
+if (this.currentType === 'month') {
+  values = (currentData.moin && currentData.moin.length > 0) 
+           ? currentData.moin 
+           : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; // Default: kol el chhour
+} else {
+  values = (currentData.year && currentData.year.length > 0) 
+           ? currentData.year 
+           : [2024, 2025, 2026]; 
+}
+    this.store.getKpiDatapro('mttd', this.currentType, values).subscribe({
+      next: (res) => {
+        const valuesArray: number[] = Object.values(res);
+        if (valuesArray.length > 0) {
+          const sum = valuesArray.reduce((a, b) => a + b, 0);
+          const avg = sum / valuesArray.length;
+          this.mttd.set(Math.round(avg)); 
+        } else {
+          this.mttd.set(0);
+        }
+      },
+      error: (err) => {
+        if (err.status === 401 || err.status === 403) {
+          this.router.navigate(['/login']);
+        } else {
+          console.error('Error fetching MTTD', err);
+        }
+      }
+    });
+  }
+}

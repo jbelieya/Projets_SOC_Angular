@@ -10,7 +10,7 @@ export class ChatService {
   
   private statusSubject = new Subject<any>();
   status$ = this.statusSubject.asObservable();
-
+  
   constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
